@@ -1,0 +1,60 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <ui:composition template="header.xhtml">
+            <ui:define name="content">
+                <div class="card">
+                    <h:form>
+                        <p:dataTable var="passenger" value="#{passengerController.allPassengers}" rows="5"
+                                     paginator="true" paginatorPosition="top"
+                                     paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                     currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} records"
+                                     rowsPerPageTemplate="5,10,{ShowAll|'All'}" sortMode="single">
+                            
+                            <p:column headerText="Profile" >
+                                <img style="width:50px; " src="/SuratSwiftMetro/Passenger/profile/#{passenger.profile}" alt="NULL"/>
+                        
+                            </p:column>
+                            
+                            <p:column headerText="FullName" sortBy="#{passenger.fullname}" filterBy="#{passenger.fullname}" filterMatchMode="contains">
+                                 <h:outputText value="#{passenger.fullname}" />
+                            </p:column>
+                           
+                            <p:column headerText="Username" sortBy="#{passenger.username.username}" filterBy="#{passenger.username.username}" filterMatchMode="contains">
+                                <h:outputText value="#{passenger.username.username}" />
+                            </p:column>
+                            
+                            <p:column headerText="Type" sortBy="#{passenger.type}" filterBy="#{passenger.type}" filterMatchMode="contains">
+                                 <h:outputText value="#{passenger.type}" />
+                            </p:column>
+                            
+                            <p:column headerText="Email" sortBy="#{passenger.username.email}" filterBy="#{passenger.username.email}" filterMatchMode="contains">
+                                 <h:outputText value="#{passenger.username.email}" />
+                            </p:column>
+                            
+                            <p:column headerText="Mobile Number" sortBy="#{passenger.username.mobilenumber}" filterBy="#{passenger.username.mobilenumber}" filterMatchMode="contains">
+                                 <h:outputText value="#{passenger.username.mobilenumber}" />
+                            </p:column>
+                            
+                            <p:column headerText="Gender" sortBy="#{passenger.username.gender}" filterBy="#{passenger.username.gender}" filterMatchMode="contains">
+                                 <h:outputText value="#{passenger.username.gender}" />
+                            </p:column>
+                            
+                            <p:column headerText="Date Of Birth" sortBy="#{passenger.username.dateofbirth}" filterBy="#{passenger.username.dateofbirth}" filterMatchMode="contains">
+                                 <h:outputText value="#{passenger.username.dateofbirth}" />
+                            </p:column>
+                        </p:dataTable>
+                    </h:form>
+                </div>
+
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

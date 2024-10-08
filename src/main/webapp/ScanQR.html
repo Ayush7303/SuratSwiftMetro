@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>SuratSwiftMetro</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <div id="qr-result"></div>
+        <h1>Scan QR Code</h1>
+        <div style="display: flex; justify-content: center;">
+            <div id="qr-reader" style="width: 500px;"></div>
+        </div>
+        <script src="https://unpkg.com/html5-qrcode"></script>
+        <script>
+
+            async function checkSubscriptionStatus(subscriptionId) {
+                try {
+                    const response = await fetch(`/SuratSwiftMetro/resources/user/subscriptionById/get/${subscriptionId}`);
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    const subscription = await response.json();
+                    console.log(subscription);
+                    if (subscription.status === true) {
+                        alert('Subscription is valid');
+                    } else {
+                        alert('Subscription is invalid');
+                    }
+                } catch (error) {
+                    console.error('Failed to check subscription status:', error);
+                    alert('Failed to check subscription status');
+                }
+            }
+
+
+            async function updateBookingStatus(bookingId) {
+                try {
+                    const response = await fetch(`/SuratSwiftMetro/resources/user/update/booking/status/${bookingId}`, {
+                        method: 'PUT'
+                    });
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    console.log('Booking status updated successfully');
+                } catch (error) {
+                    console.error('Failed to update booking status:', error);
+                }
+            }
+
+            document.addEventListener("DOMContentLoaded", function () {
+                var myQR = document.getElementById('qr-result');
+                var lastResult, countResult = 0;
+
+                function onScanSuccess(decodeText, decodeResult) {
+                    if (decodeText !== lastResult) {
+                        ++countResult;
+                        lastResult = decodeText;
+
+                        let parts = decodeText.split('/');
+                        let operation = parts[parts.length - 2];
+                        let id = parts[parts.length - 1];
+
+    //                    alert(`Scan Result: ${decodeText}`);
+                        myQR.innerHTML = `You scan ${countResult} : ${decodeText}`;
+
+                        if (operation === 'Booking') {
+                            updateBookingStatus(id);
+                        } else if (operation === 'Subscription') {
+                            checkSubscriptionStatus(id);
+                        }
+                    }
+                }
+
+                var htmlScanner = new Html5QrcodeScanner(
+                        "qr-reader", {fps: 10, qrbox: 250}
+                );
+                htmlScanner.render(onScanSuccess);
+            });
+        </script>
+    </body>
+</html>

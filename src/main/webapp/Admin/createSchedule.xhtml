@@ -1,0 +1,64 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <ui:composition template="header.xhtml">
+            <ui:define name="content">
+
+                <h4>Create Metro Schedule</h4>
+                <div class="card p-3">
+
+                    <div class="ui-fluid">
+
+                        <h:form id="formSche">
+
+                            <div class="field">
+                                <p:outputLabel for="sr" value="Select Route"/>
+                                <p:selectOneMenu id="sr" value="#{scheduleController.routeId}">
+                                    <f:selectItems value="#{routeController.allRoutes}" var="r" itemLabel="#{r.routenumber}" itemValue="#{r.routeid}"/>
+                                </p:selectOneMenu>
+                            </div>
+
+                            <div class="field">
+                                <p:outputLabel for="sm" value="Select Metro"/>
+                                <p:selectOneMenu id="sm" value="#{scheduleController.metroId}">
+                                    <f:selectItems value="#{metroController.allMetros}" var="m" itemLabel="#{m.metroname}" itemValue="#{m.metroid}"/>
+                                </p:selectOneMenu>
+                            </div>
+
+                            <div class="field">
+                                <p:outputLabel for="ms" value="Schedule Date"/><h:message for="ms" style="color: red;font-size:small;"/>
+                                <p:datePicker  id="ms" value="#{scheduleController.newSchedule.scheduledate}" required="true" requiredMessage="Date is required."/>
+                            </div>
+                            <div class="field">
+                                <p:outputLabel for="mst" value="Start Time"/><h:message for="mst" style="color: red;font-size:small;"/>
+                                <p:datePicker id="mst" value="#{scheduleController.newSchedule.starttime}" required="true" requiredMessage="Start Time is required."   showTime="true" />
+                            </div>
+                            <div class="field">
+                                <p:outputLabel for="met" value="Expected End Time"/><h:message for="met" style="color: red;font-size:small;"/>
+                                <p:datePicker id="met" value="#{scheduleController.newSchedule.expectedendtime}" required="true" requiredMessage="End Time is required."  showTime="true" />
+                            </div>
+                            <div class="field">
+                                <p:outputLabel for="mstatus" value="Status"/><br/>
+                                <p:selectBooleanCheckbox id="mstatus" value="#{scheduleController.newSchedule.status}" itemLabel="Active"/>
+                            </div>
+                            <div class="button-container" style="display: flex;gap:10px;margin-top: 15px;">
+                                <p:commandButton value="Add" action="#{scheduleController.addSchedule()}" update="formSche" style="margin-top: 15px;background: #EC6B5B;border: none;width: 10%;"/>
+                                <p:commandButton value="Back To List" action="displaySchedule.jsf?faces-redirect=true" style="margin-top: 15px;background: gray;border: none;width: 10%;" immediate="true"/>                    
+                            </div>
+                        </h:form>
+
+                    </div>
+                </div>
+
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

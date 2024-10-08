@@ -1,0 +1,59 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <ui:composition template="header.xhtml">
+            <ui:define name="content">
+
+                <h4>Create Scheme</h4>
+                <div class="card p-3">
+
+                    <div class="ui-fluid">
+
+                        <h:form id="formScheme">
+                            <div class="field">
+                                <p:outputLabel for="sname" value="Scheme Name"/><h:message for="sname" style="color: red;font-size:small;"/>
+                                <p:inputText id="sname" value="#{schemeController.newScheme.schemename}" required="true" requiredMessage="Scheme Name is required."/>
+                            </div>
+                            <div class="field">
+                                <p:outputLabel for="sdesc" value="Scheme Description"/><h:message for="sdesc" style="color: red;font-size:small;"/>
+                                <p:inputText id="sdesc" value="#{schemeController.newScheme.schemedescription}" required="true" requiredMessage="Description is required."/>
+                            </div>
+                            <div class="field">
+                                <p:outputLabel for="dis" value="Discount"/><h:message for="dis" style="color: red;font-size:small;"/>
+                                <p:inputText id="dis" value="#{schemeController.newScheme.discount}"/>
+                            </div>
+                            <div class="field">
+                                <p:outputLabel for="val" value="Validity"/><h:message for="val" style="color: red;font-size:small;"/>
+                                <p:inputText id="val" value="#{schemeController.newScheme.validity}"/>
+                            </div>
+                            <div class="field">
+                                <h:outputLabel for="pt" value="Type" class="label"/>
+                                <p:selectOneMenu class="select" id="registerType" value="#{schemeController.newScheme.passangertype}" required="true">
+                                    <f:selectItem itemLabel="Citizen" itemValue="Citizen"/>
+                                    <f:selectItem itemLabel="Student" itemValue="Student"/>
+                                    <f:selectItem itemLabel="Women" itemValue="Women"/>
+                                    <f:selectItem itemLabel="Senior Citizen" itemValue="Senior Citizen"/>
+                                </p:selectOneMenu>
+                             </div>
+                            <div class="button-container" style="display: flex;gap:10px;margin-top: 15px;">
+
+                                <p:commandButton value="Add" action="#{schemeController.addScheme()}" update="formScheme" style="margin-top: 15px;background: #EC6B5B;border: none;width: 10%;"/>
+
+                                <p:commandButton value="Back To List" action="displayScheme.jsf?faces-redirect=true" style="margin-top: 15px;background: gray;border: none;width: 10%;" immediate="true"/>                    
+                            </div>
+                        </h:form>
+
+                    </div>
+                </div>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

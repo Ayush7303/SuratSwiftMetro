@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Facelet Title</title>
+        <link rel="stylesheet" href="css/login.css"/>
+    </h:head>
+    <h:body>
+        <div class="box">
+            <h:form id="login">
+                <div class="head1" style="color: black;">Sign In</div>
+                <!--<h:panelGrid columns="2">-->
+                <h:outputLabel value="Select Role:" class="label"/>
+                <p:selectOneMenu class="select" id="role" value="#{loginController.role}" style="margin-bottom: 20px;background: #eeeeee">
+                    <f:selectItem itemLabel="Passenger" itemValue="Passenger"/>
+                    <f:selectItem itemLabel="Cashier" itemValue="Cashier"/>
+                    <f:selectItem itemLabel="Admin" itemValue="Admin"/>
+                </p:selectOneMenu>
+                <!--<h:outputLabel for="username" value="Username" class="label"/>-->
+                <p:inputText style="background: #eeeeee;" id="username" value="#{loginController.username}" placeholder="Username" required="true" requiredMessage="*Username is Required."/>
+                <h:message class="err" for="username"/><br/>
+
+                <!--<h:outputLabel for="password" value="Password" class="label"/>-->
+                <p:password style="background: #eeeeee;"  id="password" value="#{loginController.password}" placeholder="Password" required="true" requiredMessage="*Password is Required."/>
+                <h:message class="err" for="password"/><br/>
+                <h:outputText class="err" value="#{request.getParameter('error')}" ></h:outputText>
+                <!--</h:panelGrid>-->
+                <div class="m"><h:link style="color: black;" outcome="register">Don't have an account? Register Now!</h:link></div>
+                <div class="m"><h:link style="color: black;" outcome="forgorPassword">Forgotten your Password?</h:link></div>
+                <h:commandButton value="Login" action="#{loginController.login()}"/>
+            </h:form>
+
+        </div>
+
+
+    </h:body>
+</html>

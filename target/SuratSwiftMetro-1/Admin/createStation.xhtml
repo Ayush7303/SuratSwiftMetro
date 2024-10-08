@@ -1,0 +1,213 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <ui:composition template="header.xhtml">
+            <ui:define name="content">
+
+                <h4> Create Station </h4>
+                <div class="card p-3">
+
+                    <div class="ui-fluid">
+                        <div id="map" style="width:1180px;height: 600px;display: none;"></div>
+
+                        <h:form id="stationForm">
+                            <div class="field">
+                                <p:outputLabel for="sname" value="Station Name"/><h:message for="sname" style="color: red;font-size:small;"/>
+                                <p:inputText id="sname" value="#{stationController.newStation.stationname}" required="true" requiredMessage="Station Name is required."/>
+                                <!--<h:outputText value="&nbsp;" escape="false" />-->
+                            </div>
+                            <div class="field">
+                                <p:outputLabel for="latitude" value="Station Latitude"/><span id="txtLatitude"></span><h:message for="latitude" style="color: red;font-size:small;"/>
+                                <p:inputText id="latitude" value="#{stationController.newStation.latitude}" required="true" validatorMessage="Latitude is required.">
+                                    <f:validateDoubleRange minimum="1"/>
+                                </p:inputText>
+                                <!--<h:outputText value="&nbsp;" escape="false" />-->
+                            </div>
+                            <div class="field">
+                                <p:outputLabel for="slongitude" value="Station Longitude"/><span id="txtLongitude"></span><h:message for="slongitude" style="color: red;font-size:small;"/>
+                                <p:inputText id="slongitude" value="#{stationController.newStation.longitude}" required="true" validatorMessage="Londtitude is required.">
+                                    <f:validateDoubleRange minimum="1"/>
+                                </p:inputText>
+                                <!--<h:outputText value="&nbsp;" escape="false" />-->
+                            </div>
+                            <div class="field">
+                                <p:outputLabel for="sarea" value="Station Area"/>                                <h:message for="sarea" style="color: red;font-size:small;"/>
+                                <p:inputText id="sarea" value="#{stationController.newStation.area}" required="true" requiredMessage="Area is required."/>
+                                <!--<h:outputText value="&nbsp;" escape="false" />-->
+                            </div>
+                            <div class="field">
+                                <p:outputLabel for="sac" value="Active"/><br/>
+                                <p:selectBooleanCheckbox id="sac" value="#{stationController.newStation.active}" itemLabel="Active"/>
+                            </div>
+                            <div class="button-container" style="display: flex;gap:10px;margin-top: 15px;">
+                                <p:commandButton value="Add" action="#{stationController.addStation()}" update="stationForm" style="margin-top: 15px;background: #EC6B5B;border: none;width: 10%;"/>
+                                <p:commandButton value="Back To List" action="displayStation.jsf?faces-redirect=true" style="margin-top: 15px;background:gray;border: none;width: 10%;" immediate="true"/>
+                                <p:commandButton id="mapBtn" value="Open Map" onclick="toggleMap()" style="margin-top: 15px;background: black;border: none;width: 10%;" immediate="true"/>                    
+                            </div>
+                        </h:form>
+
+                    </div>
+                </div>
+                <script type="text/javascript">
+                    function toggleMap() {
+                        var mapDiv = document.getElementById('map');
+                        if (mapDiv.style.display === 'none') {
+                            mapDiv.style.display = 'block';
+                            initializeMap();
+                        } else {
+                            mapDiv.style.display = 'none';
+                        }
+                    }
+                    function initializeMap() {
+                        const map = L.map('map');
+
+                        map.setView([21.1810934, 72.8172696], 14);
+
+                        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                            maxZoom: 19,
+                            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+                        }).addTo(map);
+
+                        googleHybrid = L.tileLayer('http://{s}.google.com/vt/lyrs=s,h&amp;x={x}&amp;y={y}&amp;z={z}', {
+                            maxZoom: 20,
+                            subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
+                        });
+                        googleHybrid.addTo(map);
+
+                        const customIconRed = L.icon({
+                            iconUrl: 'marker.png',
+                            iconSize: [60, 60]
+                        });
+                        const customIconGreen = L.icon({
+                            iconUrl: 'marker_green.png',
+                            iconSize: [60, 60]
+                        });
+                        const customIconBlack = L.icon({
+                            iconUrl: 'marker_black.png',
+                            iconSize: [60, 60]
+                        });
+//                    var stations=stationBean.allStations;
+//                    console.log(stations);
+
+
+                        function fetchStationData() {
+                        var xhrStations = new XMLHttpRequest();
+                        xhrStations.onreadystatechange = function () {
+                            if (xhrStations.readyState === XMLHttpRequest.DONE) {
+                                if (xhrStations.status === 200) {
+                                    var stations = JSON.parse(xhrStations.responseText);
+                                    fetchRouteStationData(stations);
+                                }
+                            }
+                        };
+                        xhrStations.open("GET", "/SuratSwiftMetro/resources/user/station/get", true);
+                        xhrStations.send();
+                    }
+
+                    function fetchRouteStationData(stations) {
+                        var xhrRoutes = new XMLHttpRequest();
+                        xhrRoutes.onreadystatechange = function () {
+                            if (xhrRoutes.readyState === XMLHttpRequest.DONE) {
+                                if (xhrRoutes.status === 200) {
+                                    var routeStations = JSON.parse(xhrRoutes.responseText);
+                                    addMarkers(stations, routeStations);
+                                }
+                            }
+                        };
+                        xhrRoutes.open("GET", "/SuratSwiftMetro/resources/user/route_station/get", true);
+                        xhrRoutes.send();
+                    }
+
+                    function addMarkers(stations, routeStations) {
+                        stations.forEach(function (station) {
+                            var matchedRouteStation = routeStations.find(routeStation => routeStation.stationId === station.stationid);
+                            console.log(matchedRouteStation);
+                            if (matchedRouteStation) {
+                                var icon;
+                                if (matchedRouteStation.routeId === 1) {
+                                    icon = customIconRed;
+                                } else if (matchedRouteStation.routeId === 2) {
+                                    icon = customIconGreen;
+                                } else {
+                                    icon = customIconBlack;
+                                }
+
+                                var marker = L.marker([station.latitude, station.longitude], {
+                                    title: station.stationname,
+                                    icon: icon
+                                }).bindPopup('<h6>' + station.stationname + '</h6>');
+                                marker.addTo(map);
+                            } else {
+                                var marker = L.marker([station.latitude, station.longitude], {
+                                    title: station.stationname,
+                                    icon: customIconBlack
+                                }).bindPopup('<h6>' + station.stationname + '</h6>');
+                                marker.addTo(map);
+                            }
+                        });
+                    }
+
+                    fetchStationData();
+
+                        function fetchStationLink() {
+                            var xhr1 = new XMLHttpRequest();
+                            xhr1.onreadystatechange = function () {
+                                if (xhr1.readyState === XMLHttpRequest.DONE) {
+                                    if (xhr1.status === 200) {
+                                        var stationLinks = JSON.parse(xhr1.responseText);
+                                        stationLinks.forEach(function (sl) {
+                                            if (sl.routeid.routeid === 2) {
+//                                            L.Routing.control({
+//                                                waypoints: [
+//                                                    L.latLng(sl.currentstation.latitude, sl.currentstation.longitude),
+//                                                    L.latLng(sl.nextstation.latitude, sl.nextstation.longitude)
+//                                                ],
+//                                                fitSelectedRoutes: false,
+//                                                createMarker: function () {
+//                                                    return null;
+//                                                },
+//
+//                                                
+//                                            }).addTo(map);
+                                                L.polyline([[sl.currentstation.latitude, sl.currentstation.longitude], [sl.nextstation.latitude, sl.nextstation.longitude]], {color: 'green', weight: 10}).addTo(map);
+                                            } else if (sl.routeid.routeid === 1) {
+                                                L.polyline([[sl.currentstation.latitude, sl.currentstation.longitude], [sl.nextstation.latitude, sl.nextstation.longitude]], {color: 'red', weight: 10}).addTo(map);
+                                            } else {
+                                                L.polyline([[sl.currentstation.latitude, sl.currentstation.longitude], [sl.nextstation.latitude, sl.nextstation.longitude]], {color: 'black', weight: 10}).addTo(map);
+
+                                            }
+                                        });
+                                    }
+                                }
+                            };
+                            xhr1.open("GET", "/SuratSwiftMetro/resources/user/stationLink/get", true);
+                            xhr1.send();
+                        }
+                        fetchStationLink();
+
+                        map.on('click', function (e) {
+                            document.getElementById('txtLatitude').innerHTML = " : " + e.latlng.lat;
+                            document.getElementById('txtLongitude').innerHTML = " : " + e.latlng.lng;
+//                            console.log("Latitude: " + e.latlng.lat + ", Longitude: " + e.latlng.lng);
+                            var mapDiv = document.getElementById('map');
+
+                            mapDiv.style.display = 'none';
+
+                        });
+
+                    }
+
+                </script>
+
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

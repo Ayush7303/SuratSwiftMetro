@@ -1,0 +1,49 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <ui:composition template="header.xhtml">
+            <ui:define name="content">
+                <div class="card">
+                    <h:form>
+                        <p:dataTable var="collection" value="#{collectionController.allCollectionStation}" rows="8"
+                                     paginator="true" paginatorPosition="top"
+                                     paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                     currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} records"
+                                     rowsPerPageTemplate="8,16,{ShowAll|'All'}" sortMode="single">
+
+                            <p:column headerText="Station" sortBy="#{collection.stationid.stationname}" filterBy="#{collection.stationid.stationname}" filterMatchMode="contains">
+                                 <h:outputText value="#{collection.stationid.stationname}" />
+                            </p:column>
+
+                            <p:column headerText="Cashier" sortBy="#{collection.cashier.username}" filterBy="#{collection.cashier.username}" filterMatchMode="contains">
+                                 <h:outputText value="#{collection.cashier.username}" />
+                            </p:column>
+
+                            <p:column headerText="Collection Date" sortBy="#{collection.collectiondate}" filterBy="#{collection.collectiondate}" filterMatchMode="contains">
+                                <h:outputText value="#{collection.collectiondate}" />
+                            </p:column>
+
+                            <p:column headerText="Total Collection" sortBy="#{collection.totalcollection}" filterBy="#{collection.totalcollection}" filterMatchMode="contains">
+                                <h:outputText value="#{collection.totalcollection}" />
+                            </p:column>
+                            
+                            <p:column headerText="Status" sortBy="#{collection.status}" filterBy="#{collection.status}" filterMatchMode="contains">
+                                 <h:outputText value="#{collection.status}" />
+                            </p:column>
+
+                          
+                        </p:dataTable>
+                    </h:form>
+                </div>
+
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

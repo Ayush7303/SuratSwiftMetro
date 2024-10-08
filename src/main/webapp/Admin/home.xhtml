@@ -1,0 +1,280 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+
+    </h:head>
+    <h:body>
+        <ui:composition template="header.xhtml">
+            <ui:define name="content">
+                <!-- Your content goes here -->
+                <!--<h1>Welcome to SuratSwiftMetro !</h1>-->
+                <h:form>
+                    <p:commandButton value="Search Fare" style="background: #EC6B5B;border: none;margin-bottom: 10px;" icon="fa-solid fa-magnifying-glass" onclick="toggleSearch()"/>
+                </h:form>
+                <div class="card" style="padding:  10px;margin-bottom: 10px;display: none;border: 1px orange solid" id="searchCard">
+                    <h1>Plan Your Journey</h1>
+                    <h:form id="searchForm">
+                        <div style="display: flex;gap:10px;margin-top: 15px;">
+                            <div class="field" style="flex: 1;">
+                                <p:outputLabel for="ss" value="From"/>
+                                <p:selectOneMenu id="ss" value="#{stationController.from}" style="width: 100%;">
+                                    <f:selectItems value="#{stationController.allStations}" var="s" itemLabel="#{s.stationname}" itemValue="#{s.stationid}"/>
+                                </p:selectOneMenu>
+                            </div>
+                            <div class="field" style="flex: 1;">
+                                <p:outputLabel for="es" value="To"/>
+                                <p:selectOneMenu id="es" value="#{stationController.to}" style="width: 100%;">
+                                    <f:selectItems value="#{stationController.allStations}" var="s" itemLabel="#{s.stationname}" itemValue="#{s.stationid}"/>
+                                </p:selectOneMenu>
+                            </div>      
+                            <div style="flex: 1; display: flex; align-items: flex-end;">
+                                <p:commandButton value="Show me Fare" action="#{stationController.searchFare()}" update="searchForm" style="background: orange; border: none; width: 100%;margin: 0% 20%; "/>
+                        
+                            </div>
+                        </div>
+                        <div style="display: flex;gap:10px;margin-top: 15px;" id="showDetails">
+                        <div style="flex: 1;text-align: center;">
+                            <i class="fa-solid fa-indian-rupee-sign"></i>
+                            <h5>Fare - #{stationController.fare}</h5>
+                        </div>
+                        <div style="flex: 1;text-align: center;">
+                            <i class="fa-solid fa-train-subway"></i>
+                            <h5>Between Stations - #{stationController.stationCount}</h5>
+                        </div>  
+                        <div style="flex: 1;text-align: center;">
+                            <i class="fa-solid fa-right-left"></i>
+                            <h5>Interchange - 0</h5>
+                        </div>  
+                    </div>
+                    </h:form>
+                    
+                </div>
+                <div id="map" style="width: 100%;height: 90%;"></div>
+                <script type="text/javascript">
+                    function toggleSearch() {
+                        var mapDiv = document.getElementById('searchCard');
+                        if (mapDiv.style.display === 'none') {
+                            mapDiv.style.display = 'block';
+//                            initializeMap();
+                        } else {
+                            mapDiv.style.display = 'none';
+                        }
+                    }
+
+                    const map = L.map('map');
+
+                    map.setView([21.1810934, 72.8172696], 13);
+
+                    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                        maxZoom: 19,
+                        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+                    }).addTo(map);
+
+//                    L.control.locate().addTo(map);
+
+                    googleHybrid = L.tileLayer('http://{s}.google.com/vt/lyrs=s,h&amp;x={x}&amp;y={y}&amp;z={z}', {
+                        maxZoom: 20,
+                        subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
+                    });
+                    googleHybrid.addTo(map);
+
+
+                    const customIconRed = L.icon({
+                        iconUrl: 'marker.png',
+                        iconSize: [60, 60]
+                    });
+                    const customIconGreen = L.icon({
+                        iconUrl: 'marker_green.png',
+                        iconSize: [60, 60]
+                    });
+                    const customIconBlack = L.icon({
+                        iconUrl: 'marker_black.png',
+                        iconSize: [60, 60]
+                    });
+
+                    function fetchStationData() {
+                        var xhrStations = new XMLHttpRequest();
+                        xhrStations.onreadystatechange = function () {
+                            if (xhrStations.readyState === XMLHttpRequest.DONE) {
+                                if (xhrStations.status === 200) {
+                                    var stations = JSON.parse(xhrStations.responseText);
+                                    fetchRouteStationData(stations);
+                                }
+                            }
+                        };
+                        xhrStations.open("GET", "/SuratSwiftMetro/resources/admin/station/get", true);
+                        xhrStations.send();
+                    }
+
+                    function fetchRouteStationData(stations) {
+                        var xhrRoutes = new XMLHttpRequest();
+                        xhrRoutes.onreadystatechange = function () {
+                            if (xhrRoutes.readyState === XMLHttpRequest.DONE) {
+                                if (xhrRoutes.status === 200) {
+                                    var routeStations = JSON.parse(xhrRoutes.responseText);
+                                    addMarkers(stations, routeStations);
+                                }
+                            }
+                        };
+                        xhrRoutes.open("GET", "/SuratSwiftMetro/resources/admin/route_station/get", true);
+                        xhrRoutes.send();
+                    }
+
+                    function addMarkers(stations, routeStations) {
+                        stations.forEach(function (station) {
+                            var matchedRouteStation = routeStations.find(routeStation => routeStation.stationId === station.stationid);
+                            console.log(matchedRouteStation);
+                            if (matchedRouteStation) {
+                                var icon;
+                                if (matchedRouteStation.routeId === 1) {
+                                    icon = customIconRed;
+                                } else if (matchedRouteStation.routeId === 2) {
+                                    icon = customIconGreen;
+                                } else {
+                                    icon = customIconBlack;
+                                }
+
+                                var marker = L.marker([station.latitude, station.longitude], {
+                                    title: station.stationname,
+                                    icon: icon
+                                }).bindPopup('<h6>' + station.stationname + '</h6>');
+                                marker.addTo(map);
+                            } else {
+                                var marker = L.marker([station.latitude, station.longitude], {
+                                    title: station.stationname,
+                                    icon: customIconBlack
+                                }).bindPopup('<h6>' + station.stationname + '</h6>');
+                                marker.addTo(map);
+                            }
+                        });
+                    }
+
+                    fetchStationData();
+
+                    function fetchStationLink() {
+                        var xhr1 = new XMLHttpRequest();
+                        xhr1.onreadystatechange = function () {
+                            if (xhr1.readyState === XMLHttpRequest.DONE) {
+                                if (xhr1.status === 200) {
+                                    var stationLinks = JSON.parse(xhr1.responseText);
+                                    stationLinks.forEach(function (sl) {
+                                        if (sl.routeid.routeid === 2) {
+//                                            L.Routing.control({
+//                                                waypoints: [
+//                                                    L.latLng(sl.currentstation.latitude, sl.currentstation.longitude),
+//                                                    L.latLng(sl.nextstation.latitude, sl.nextstation.longitude)
+//                                                ],
+//                                                fitSelectedRoutes: false,
+//                                                createMarker: function () {
+//                                                    return null;
+//                                                },
+//
+//                                                
+//                                            }).addTo(map);
+                                            L.polyline([[sl.currentstation.latitude, sl.currentstation.longitude], [sl.nextstation.latitude, sl.nextstation.longitude]], {color: 'green', weight: 10}).addTo(map);
+                                        } else if (sl.routeid.routeid === 1) {
+                                            L.polyline([[sl.currentstation.latitude, sl.currentstation.longitude], [sl.nextstation.latitude, sl.nextstation.longitude]], {color: 'red', weight: 10}).addTo(map);
+                                        } else {
+                                            L.polyline([[sl.currentstation.latitude, sl.currentstation.longitude], [sl.nextstation.latitude, sl.nextstation.longitude]], {color: 'black', weight: 10}).addTo(map);
+
+                                        }
+                                    });
+                                }
+                            }
+                        };
+                        xhr1.open("GET", "/SuratSwiftMetro/resources/admin/stationLink/get", true);
+                        xhr1.send();
+                    }
+                    fetchStationLink();
+//                    L.marker([21.1810934, 72.8172696], {
+//                        title: "Main Station",
+//                        icon: customIcon
+//                    }).bindPopup('<h5>Majura Gate Station</h5>')
+//                            .addTo(map);
+
+//                    var polyLine=L.polyline([[21.2193499,72.7679245],[21.1899421,72.8901664]],{color:'red'}).addTo(map);
+
+
+
+
+
+//                    var stations=stationBean.allStations;
+//                    console.log(stations);
+
+//                    function fetchOnlyStationData() {
+//                        var xhr = new XMLHttpRequest();
+//                        xhr.onreadystatechange = function () {
+//                            if (xhr.readyState === XMLHttpRequest.DONE) {
+//                                if (xhr.status === 200) {
+//                                    var stations = JSON.parse(xhr.responseText);
+//                                    stations.forEach(function (station) {
+////                                        console.log(station);
+////                                         if (!station.routeCollection || station.routeCollection.length === 0) {
+//                                        var marker=L.marker([station.latitude,station.longitude],{
+//                                            title:station.stationname,
+//                                            icon:customIconBlack
+//                                        }).bindPopup('<h5>'+station.area+'</h5>');
+//                                        marker.addTo(map);          
+////                                         }
+//                                    });
+//                                }
+//                            }
+//                        };
+//                        xhr.open("GET", "/SuratSwiftMetro/resources/user/station/get", true);
+//                        xhr.send();
+//                    }
+//                    fetchOnlyStationData();
+//                    
+//                    
+//                    function fetchStationData() {
+//                        var xhr = new XMLHttpRequest();
+//                        xhr.onreadystatechange = function () {
+//                            if (xhr.readyState === XMLHttpRequest.DONE) {
+//                                if (xhr.status === 200) {
+//                                    var stations = JSON.parse(xhr.responseText);
+//                                    stations.forEach(function (station) {
+////                                        var marker=L.marker([station.latitude,station.longitude],{
+////                                            title:station.stationname,
+////                                            icon:customIcon
+////                                        }).bindPopup('<h5>'+station.area+'</h5>');
+////                                        marker.addTo(map);
+//                                        if (station.routeId === 1) {
+//
+//                                            var marker = L.marker([station.latitude, station.longitude], {
+//                                                title: station.stationname,
+//                                                icon: customIconRed
+//                                            }).bindPopup('<h6>' + station.stationName + '</h6>');
+//                                            marker.addTo(map);
+//
+//                                        } else if (station.routeId === 2) {
+//                                            var marker = L.marker([station.latitude, station.longitude], {
+//                                                title: station.stationname,
+//                                                icon: customIconGreen
+//                                            }).bindPopup('<h6>' + station.stationName + '</h6>');
+//                                            marker.addTo(map);
+//                                        } else {
+//                                            var marker = L.marker([station.latitude, station.longitude], {
+//                                                title: station.stationname,
+//                                                icon: customIconBlack
+//                                            }).bindPopup('<h6>' + station.stationname + '</h6>');
+//                                            marker.addTo(map);
+//                                        }
+//                                    });
+//                                }
+//                            }
+//                        };
+//                        xhr.open("GET", "/SuratSwiftMetro/resources/user/route_station/get", true);
+//                        xhr.send();
+//                    }
+//                    fetchStationData();
+                </script>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

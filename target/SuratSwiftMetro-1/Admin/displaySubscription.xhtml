@@ -1,0 +1,54 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+         <ui:composition template="header.xhtml">
+            <ui:define name="content">
+                <div class="card">
+                    <h:form>
+                        <p:dataTable var="sub" value="#{subscriptionController.allSubscriptions}" rows="5"
+                                     paginator="true" paginatorPosition="top"
+                                     paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                     currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} records"
+                                     rowsPerPageTemplate="5,10,{ShowAll|'All'}" sortMode="single">
+
+                            <p:column headerText="Scheme" sortBy="#{sub.schemeid.schemename}" filterBy="#{sub.schemeid.schemename}" filterMatchMode="contains">
+                                <h:outputText value="#{sub.schemeid.schemename}" />
+                            </p:column>
+
+                            <p:column headerText="Passenger" sortBy="#{sub.passangerid.username.username}" filterBy="#{sub.passangerid.username.username}" filterMatchMode="contains">
+                                <h:outputText value="#{sub.passangerid.username.username}" />
+                            </p:column>
+
+                            <p:column headerText="Start Date" sortBy="#{sub.startdate}" filterBy="#{sub.startdate}" filterMatchMode="contains">
+                                <h:outputText value="#{sub.startdate}" />
+                            </p:column>
+
+                            <p:column headerText="End Date" sortBy="#{sub.enddate}" filterBy="#{sub.enddate}" filterMatchMode="contains">
+                                <h:outputText value="#{sub.enddate}" />
+                            </p:column>
+
+                            <p:column headerText="Amount" sortBy="#{sub.amount}" filterBy="#{sub.amount}" filterMatchMode="contains">
+                                <h:outputText value="#{sub.amount}" />
+                            </p:column>
+                            <p:column headerText="Payment Status" sortBy="#{sub.paymentid.status}" filterBy="#{sub.paymentid.status}" filterMatchMode="contains">
+                                <h:outputText value="#{sub.paymentid.status}" />
+                            </p:column>
+                            <p:column headerText="Status" sortBy="#{sub.status}" filterBy="#{sub.status}" filterMatchMode="contains">
+                                <h:outputText value="#{sub.status}" />
+                            </p:column>
+                          
+                        </p:dataTable>
+                    </h:form>
+                </div>
+
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

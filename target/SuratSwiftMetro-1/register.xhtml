@@ -1,0 +1,91 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Facelet Title</title>
+        <link rel="stylesheet" href="css/login.css"/>
+    </h:head>
+    <h:body>
+        <div class="regBox">
+            <h:form id="register">
+                <div class="head1" style="margin-bottom: 20px;">Sign Up</div>
+                <div style="display: flex;">
+                    <div style="flex: 1;margin-right: 25px;">
+                        <!--<h:outputLabel for="registerFullName" value="Full Name" class="label"/>-->
+                        <p:inputText style="background: #eeeeee;" placeholder="Full Name" id="registerFullName" value="#{loginController.newPassenger.fullname}" required="true" requiredMessage="*Full Name is Required."/>
+                        <h:message class="err" for="registerFullName"/><br/>
+                        <h3 style="font-size: 10px;"></h3>
+
+                        <!--                        <h:outputLabel for="registerUsername" value="Username" class="label"/>-->
+                        <p:inputText style="background: #eeeeee;" placeholder="Username" id="registerUsername" value="#{loginController.newPassenger.username}" required="true" requiredMessage="*User Name is Required.">
+                            <p:ajax process="@this" listener="#{loginController.checkUsername()}" update="usernameMessage"/>
+                        </p:inputText>
+                        <h:outputText class="err" id="usernameMessage" value="#{loginController.usernameMessage}"/>
+                        <h:message class="err" for="registerUsername"/><br/>
+                        <h3 style="font-size: 10px;"></h3>
+
+                        <!--<h:outputLabel for="registerPassword" value="Password" class="label"/>-->
+                        <p:password style="background: #eeeeee;" placeholder="Password" id="registerPassword" value="#{loginController.newPassenger.password}" required="true" requiredMessage="*Password is Required."/>
+                        <h:message class="err" for="registerPassword"/><br/>
+                        <h3 style="font-size: 10px;"></h3>
+
+                        <!--<h:outputLabel for="registerConfirmPassword" value="Confirm Password" class="label"/>-->
+                        <p:password style="background: #eeeeee;" placeholder="Confirm Password" id="registerConfirmPassword" value="#{loginController.confirmPassword}"  required="true" requiredMessage="*Confirm Password is Required.">
+                            <p:ajax event="keyup" update="passwordMatchMessage" listener="#{loginController.checkPasswordMatch}" process="@this registerPassword"/>                        
+                        </p:password>
+                        <h:outputText class="err" id="passwordMatchMessage" value="#{loginController.passwordMatchMessage}" />
+                        <h:message class="err" for="registerConfirmPassword"/><br/>
+                        <h3 style="font-size: 10px;"></h3>
+
+                        <h:outputLabel for="registerType" value="Type" class="label"/>
+                        <p:selectOneMenu style="background: #eeeeee;" class="select" id="registerType" value="#{loginController.newPassenger.type}" required="true">
+                            <f:selectItem itemLabel="Citizen" itemValue="Citizen"/>
+                            <f:selectItem itemLabel="Student" itemValue="Student"/>
+                            <f:selectItem itemLabel="Women" itemValue="Women"/>
+                            <f:selectItem itemLabel="Senior Citizen" itemValue="Senior Citizen"/>
+                        </p:selectOneMenu>
+                        <!--<h:message class="err" for="registerType"/><br/>-->
+                        <h3 style="font-size: 10px;"></h3>
+                    </div>
+                    <div style="flex: 1;">
+
+
+
+                        <!--<h:outputLabel for="registerMobileno" value="Mobile No." class="label"/>-->
+                        <p:inputText style="background: #eeeeee;" placeholder="Mobile Number" id="registerMobileno" value="#{loginController.newPassenger.mobilenumber}" required="true" requiredMessage="*Moibile Number is Required."/>
+                        <h:message class="err" for="registerMobileno"/><br/>
+                        <h3 style="font-size: 10px;"></h3>
+
+                        
+                        <p:inputText style="background: #eeeeee;" placeholder="E-mail" id="registerEmail" value="#{loginController.newPassenger.email}" required="true" requiredMessage="*E-mail is Required.">
+                            <p:ajax process="@this" listener="#{loginController.checkEmail()}" update="emailMessage"/>
+                        </p:inputText>
+                        <h:outputText class="err" id="emailMessage" value="#{loginController.emailMessage}"/>
+                        <h:message class="err" for="registerEmail"/><br/>
+                        <h3 style="font-size: 10px;"></h3>
+                        
+                         <!--<h:outputLabel for="registerDOB" value="Date Of Birth" class="label"/>-->
+                         <p:datePicker  style="background-color: #eeeeee;width: 100%;" monthNavigator="true" yearNavigator="true" placeholder="Select Date" id="registerDOB" value="#{loginController.newPassenger.dateofbirth}"  required="true" pattern="yyyy-MM-dd" requiredMessage="*DOB pattern yyyy-MM-dd" yearRange="1950:2030"/>
+                        <h:message class="err" for="registerDOB"/><br/>
+
+                       
+
+                        <h:outputLabel for="registerGender" value="Gender" class="label"/>
+                        <p:selectOneRadio  id="registerGender" value="#{loginController.newPassenger.gender}" required="true" requiredMessage="*select a Gender.">
+                            <f:selectItem itemLabel="Male" itemValue="Male"/>
+                            <f:selectItem itemLabel="Female" itemValue="Female"/>
+                            <f:selectItem itemLabel="Others" itemValue="Others"/>
+                        </p:selectOneRadio>
+                        <h:message class="err" for="registerGender"/><br/>
+                    </div>
+                </div>
+                <div class="m"><h:link style="color: black;margin-top: 20px;" outcome="login">Already have an account? Sign in</h:link></div>
+                <h:commandButton value="Register" action="#{loginController.register()}"/>
+            </h:form>
+
+        </div>
+    </h:body>
+</html>

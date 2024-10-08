@@ -1,0 +1,369 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:p="http://xmlns.jcp.org/jsf/facelets">
+    <h:head>
+        <title>Passenger - Schemes</title>
+        <!-- bootstrap css -->
+        <link rel="stylesheet" href="../css/bootstrap.min.css" />
+        <!-- site css -->
+        <link rel="stylesheet" href="../css/style.css" />
+        <!-- responsive css -->
+        <link rel="stylesheet" href="../css/responsive.css" />
+        <!-- color css -->
+        <link rel="stylesheet" href="../css/colors.css" />
+        <!-- select bootstrap -->
+        <link rel="stylesheet" href="../css/bootstrap-select.css" />
+        <!-- scrollbar css -->
+        <link rel="stylesheet" href="../css/perfect-scrollbar.css" />
+        <!-- custom css -->
+        <link rel="stylesheet" href="../css/custom.css" />
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+        <script src="https://kit.fontawesome.com/e6a8e37cff.js" crossorigin="anonymous"></script> 
+        <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+        <style>
+            .subscriptions thead{
+                background: #15283c;
+            }
+            
+            .subscriptions thead tr th{
+                color: white;
+            }
+        </style>
+    </h:head>
+
+    <h:body>
+        <div class="full_container">
+            <div class="inner_container">
+                <!-- Sidebar  -->
+                <nav id="sidebar">
+                    <div class="sidebar_blog_1">
+                        <div class="sidebar-header">
+                            <div class="logo_section">
+                                <a href="/SuratSwiftMetro/index.jsf"><img class="logo_icon img-responsive" src="images/logo/logo_icon.png" alt="#" /></a>
+                            </div>
+                        </div>
+                        <div class="sidebar_user_info">
+                            <div class="icon_setting"></div>
+                            <div class="user_profle_side">
+                                <div class="user_img">
+                                    <c:choose>
+                                        <c:when test="${not empty indexController.userImg()}">
+                                            <img class="img-responsive rounded-circle" src="profile/#{indexController.userImg()}" alt="#" />
+                                        </c:when>                                                        
+                                        <c:otherwise>
+                                            <img class="img-responsive rounded-circle" src="profile/guest_user.png" alt="#" />
+                                        </c:otherwise>
+                                    </c:choose>    
+                                </div>
+                                <div class="user_info">
+                                    <c:choose>
+                                        <c:when test="${not empty indexController.userName()}">
+                                            <h5><h:outputText value="#{indexController.userName()}"/></h5>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <h5>Anonymous</h5>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="sidebar_blog_2">
+                        <ul class="list-unstyled components">
+                            <li><a href="/SuratSwiftMetro"><i class="fa fa-globe orange_color"></i> <span>Home</span></a></li>
+                            <li><a href="/SuratSwiftMetro/scheme.jsf"><i class="fa fa-diamond purple_color"></i> <span>Schemes</span></a></li>
+                            <c:if test="${indexController.userRole() eq 'Passenger'}">
+                                <li><a href="/SuratSwiftMetro/Passenger/mybooking.jsf"><i class="fa-solid fa-passport yellow_color"></i> <span>My Bookings</span></a></li>
+                                <li><a href="/SuratSwiftMetro/Passenger/myscheme.jsf"><i class="fa-solid fa-newspaper green_color"></i> <span>My Scheme</span></a></li>                                
+                                <li><a href="/SuratSwiftMetro/issue.jsf"><i class="fa-solid fa-paper-plane yellow_color"></i> <span>Issues</span></a></li>
+                            </c:if>
+                            <li><a href="/SuratSwiftMetro/about.jsf"><i class="fa fa-object-group blue2_color"></i> <span>About Us</span></a></li>
+                            <li><a href="/SuratSwiftMetro/contact.jsf"><i class="fa fa-briefcase blue1_color"></i> <span>Contact Us</span></a></li>
+                        </ul>
+                    </div>
+                </nav>
+                <!-- end sidebar -->
+                <!-- right content -->
+                <div id="content">
+                    <!-- topbar -->
+                    <div class="topbar">
+                        <nav class="navbar navbar-expand-lg navbar-light">
+                            <div class="full">
+                                <div class="logo_section">
+                                    <a href="/SuratSwiftMetro/index.jsf"><h1 class="logo_text">SuratSwiftMetro</h1></a>
+                                </div>
+                                <div class="right_topbar">
+                                    <div class="icon_info">
+                                        <div class="dropdown_section">
+                                                <div class="dropdown dropleft mt-2">
+                                                    <button type="button" class="btn dark_bg2 dropdown-toggle"  style="background: #15283C;" data-toggle="dropdown"><i  class="fa fa-bell-o h4 text-light"></i><span class="badge">2</span></button>
+                                                   <div class="dropdown-menu margin_left p-1">
+                                                       <p:repeat value="#{indexController.notifications}" var="notification">
+                                                           <a class="dropdown-item my-2 text-wrap white_shd">#{notification.description}</a>
+                                                       </p:repeat>
+                                                   </div>
+                                                </div>
+                                            </div>
+                                        <ul class="user_profile_dd">
+                                            <li>
+                                                <a class="dropdown-toggle" data-toggle="dropdown">
+                                                    <c:choose>
+                                                        <c:when test="${not empty indexController.userImg()}">
+                                                            <img class="img-responsive rounded-circle" src="profile/#{indexController.userImg()}" alt="#" />
+                                                        </c:when>                                                        
+                                                        <c:otherwise>
+                                                            <img class="img-responsive rounded-circle" src="profile/guest_user.png" alt="#" />
+                                                        </c:otherwise>
+                                                    </c:choose>
+                                                </a>
+                                                <div class="dropdown-menu">
+                                                    <h:form>
+                                                        <c:if test="${empty indexController.userRole()}">
+                                                            <a class="dropdown-item" href="/SuratSwiftMetro/register.jsf"><span>Sign Up</span> <i class="fa fa-user-plus"></i></a>
+                                                            <a class="dropdown-item" href="/SuratSwiftMetro/login.jsf"><span>Sign In</span> <i class="fa fa-sign-in"></i></a>                                                            
+                                                        </c:if>
+                                                        <c:if test="${not empty indexController.userRole()}">
+                                                            <h:commandLink action="#{loginController.logout()}" class="dropdown-item"><span>Sign Out</span> <i class="fa fa-sign-out"></i></h:commandLink>
+                                                            <a class="dropdown-item" href="/SuratSwiftMetro/Passenger/profile.jsf"><span>Profile</span> <i class="fa-solid fa-id-card"></i></a>                                                            
+                                                        </c:if>
+
+                                                    </h:form>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </nav>
+                    </div>
+                    <!-- end topbar -->
+                    <!-- dashboard inner -->
+                    <div class="container-fluid">
+                        <div class="row column1 mt-3">
+                            <div class="col-md-12 col-lg-12">
+                                <div class="page_title">
+                                    <h2><span class="mx-3"><i class="fa fa-diamond orange_color"></i></span>My Schemes</h2>
+                                </div>
+                            </div>
+                        </div>
+                     <div class="row column1">
+                        <div class="col-md-12">
+                           <div class="white_shd full margin_bottom_30">
+                              <div class="full graph_head">
+                                 <div class="heading1 margin_0">
+                                    <h2>Active Scheme</h2>
+                                 </div>
+                              </div>
+                              <div class="full price_table padding_infor_info">
+                                 <div class="row">
+                                    <div class="col-lg-12">
+                                       <div class="table-responsive-sm">
+                                           <h:dataTable class="table table-striped subscriptions" value="#{passangerHome.activeSubscriptionsByPassenger()}" var="s">
+                                                    <h:column>
+                                                        <f:facet name="header">
+                                                            No
+                                                        </f:facet>
+                                                        #{s.subscriptionid}
+                                                    </h:column>
+                                                    <h:column>
+                                                        <f:facet name="header">
+                                                            Scheme Name
+                                                        </f:facet>
+                                                        #{s.schemeid.schemename} (#{s.schemeid.passangertype})
+                                                    </h:column>
+                                                    <h:column>
+                                                        <f:facet name="header">
+                                                            From
+                                                        </f:facet>
+                                                        #{s.startdate}
+                                                    </h:column>
+                                                    <h:column>
+                                                        <f:facet name="header">
+                                                            To
+                                                        </f:facet>
+                                                        #{s.enddate}
+                                                    </h:column>
+                                                    <h:column>
+                                                        <f:facet name="header">
+                                                            Amount
+                                                        </f:facet>
+                                                        ₹ #{s.amount}
+                                                    </h:column>    
+                                                    <h:column>
+                                                        <f:facet name="header" class="thead-dark">
+                                                            Status
+                                                        </f:facet>
+                                                        <button type="button" class="btn btn-success btn-xs">Active</button>
+                                                    </h:column>                                                    
+                                           </h:dataTable>
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                        <!-- end row -->
+                     </div> 
+                     <div class="row column1">
+                        <div class="col-md-12">
+                           <div class="white_shd full margin_bottom_30">
+                              <div class="full graph_head">
+                                 <div class="heading1 margin_0">
+                                    <h2>Expired Schemes</h2>
+                                 </div>
+                              </div>
+                              <div class="full price_table padding_infor_info">
+                                 <div class="row">
+                                    <div class="col-lg-12">
+                                       <div class="table-responsive-sm">
+                                           <h:dataTable class="table table-striped subscriptions" value="#{passangerHome.expiredSubscriptionsByPassenger()}" var="s">
+                                                    <h:column>
+                                                        <f:facet name="header">
+                                                            No
+                                                        </f:facet>
+                                                        #{s.subscriptionid}
+                                                    </h:column>
+                                                    <h:column>
+                                                        <f:facet name="header">
+                                                            Scheme Name
+                                                        </f:facet>
+                                                        #{s.schemeid.schemename} (#{s.schemeid.passangertype})
+                                                    </h:column>
+                                                    <h:column>
+                                                        <f:facet name="header">
+                                                            From
+                                                        </f:facet>
+                                                        #{s.startdate}
+                                                    </h:column>
+                                                    <h:column>
+                                                        <f:facet name="header">
+                                                            To
+                                                        </f:facet>
+                                                        #{s.enddate}
+                                                    </h:column>
+                                                    <h:column>
+                                                        <f:facet name="header">
+                                                            Amount
+                                                        </f:facet>
+                                                        ₹ #{s.amount}
+                                                    </h:column>    
+                                                    <h:column>
+                                                        <f:facet name="header">
+                                                            Status
+                                                        </f:facet>
+                                                        <button type="button" class="btn btn-danger btn-xs">Expired</button>
+                                                    </h:column>                                                    
+                                           </h:dataTable>
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                        <!-- end row -->
+                     </div> 
+                    </div>
+                    <!-- footer -->
+                    <div class="container-fluid">
+                        <div class="footer">
+                            <p>Copyright © 2024, made with &hearts; by <b>SuratSwiftMetro Team</b>
+                            </p>
+                        </div>
+                    </div>
+                    <!-- end dashboard inner -->
+                </div>
+            </div>
+        </div>
+        <!-- jQuery -->
+
+        <script src="../js/popper.min.js"></script>
+        <script src="../js/bootstrap.min.js"></script>
+        <!-- wow animation -->
+        <script src="../js/animate.js"></script>
+        <!-- select country -->
+        <script src="../js/bootstrap-select.js"></script>
+        <!-- owl carousel -->
+        <script src="../js/owl.carousel.js"></script> 
+        <!-- chart js -->
+        <script src="../js/Chart.min.js"></script>
+        <script src="../js/Chart.bundle.min.js"></script>
+        <script src="../js/utils.js"></script>
+        <script src="../js/analyser.js"></script>
+        <!-- nice scrollbar -->
+        <script src="../js/perfect-scrollbar.min.js"></script>
+        <script>
+                                                            var ps = new PerfectScrollbar('#sidebar');
+        </script>
+        <!-- custom js -->
+        <script src="../js/custom.js"></script>
+        <script src="../js/chart_custom_style1.js"></script>
+        <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+        <script>
+                                                                    var orderid;
+                                                                    function CreateOrderId() {
+                                                                        console.log("Orderid Creation");
+                                                                        let price = document.getElementById("price").value;
+                                                                        console.log("Price JS : " + price);
+                                                                        $.ajax({
+                                                                            type: "GET",
+                                                                            url: "http://localhost:8080/SuratSwiftMetro/PaymentRequest",
+                                                                            data: {"price": price},
+                                                                            success: function (data) {
+                                                                                orderid = data;
+                                                                                MakePayment();
+                                                                            }
+                                                                        });
+                                                                    }
+
+                                                                    function MakePayment() {
+                                                                        console.log("Order Id : " + orderid);
+                                                                        var options = {
+                                                                            "key": "rzp_test_YD7Gi5TdKmWROP", // Enter the Key ID generated from the Dashboard
+                                                                            "amount": "20000", // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+                                                                            "currency": "INR",
+                                                                            "name": "Acme Corp", //your business name
+                                                                            "description": "Test Transaction",
+                                                                            "image": "https://stock.adobe.com/kr/images/dots-or-points-letter-ssm-technology-logo-designs-concept-vector-template-element/470540024",
+                                                                            "order_id": orderid, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+                                                                            "handler": function (response) {
+                                                                                let source = document.getElementById("source").value;
+                                                                                let destination = document.getElementById("destination").value;
+                                                                                let price = document.getElementById("price").value;
+
+                                                                                let inputs = document.querySelectorAll(".booking-form input[type=hidden]");
+                                                                                console.log(inputs);
+                                                                                console.log(inputs[0]);
+                                                                                inputs[0].value = response.razorpay_payment_id;
+                                                                                inputs[1].value = source;
+                                                                                inputs[2].value = destination;
+                                                                                inputs[3].value = price;
+
+                                                                                console.log("Success");
+                                                                                let btn = document.getElementsByClassName("book_btn");
+                                                                                console.log(btn);
+                                                                                btn[0].click();
+                                                                            },
+                                                                            "prefill": {//We recommend using the prefill parameter to auto-fill customer's contact information especially their phone number
+                                                                                "name": "Gaurav Kumar", //your customer's name
+                                                                                "email": "gaurav.kumar@example.com",
+                                                                                "contact": "9000090000" //Provide the customer's phone number for better conversion rates 
+                                                                            },
+                                                                            "notes": {
+                                                                                "address": "Razorpay Corporate Office"
+                                                                            },
+                                                                            "theme": {
+                                                                                "color": "#3399cc"
+                                                                            }
+                                                                        };
+                                                                        var rzp1 = new Razorpay(options);
+                                                                        rzp1.open();
+                                                                    }
+
+        </script>
+    </h:body>
+</html>

@@ -1,0 +1,182 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <h:head>
+        <title>Facelet Title</title>
+        <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'/>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"/>
+        <link rel="stylesheet" href="css/style.css"/>
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/> 
+        <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@[VERSION]/dist/L.Control.Locate.min.css" />
+        <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.11.0/dist/sweetalert2.min.css" rel="stylesheet"/>
+        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>        
+        <script src="https://kit.fontawesome.com/1e3435db7e.js" crossorigin="anonymous"></script>
+        <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@[VERSION]/dist/L.Control.Locate.min.js" charset="utf-8"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.11.0/dist/sweetalert2.all.min.js"></script>
+
+    </h:head>
+    <h:body>
+        <div class="wrapper">            
+            <aside id="sidebar" class="expand">
+                <div class="d-flex">
+                    <button class="toggle-btn" type="button">
+                        <i class='bx bx-menu' ></i>
+                    </button>
+                    <div class="sidebar-logo">
+                        <a href="home.jsf"><img src="../images/logo.png" width="170px" height="23px"/></a>
+                    </div>
+                </div>
+                <ul class="sidebar-nav" style="margin-top: -30px;">
+                    
+                    <li class="sidebar-item">
+                        <a href="displayStation.jsf" class="sidebar-link">
+                            <i class="fa-solid fa-shop"></i>
+                            <span>Manage Station</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="displayRoute.jsf" class="sidebar-link">
+                            <i class='fas fa-route'></i>
+                            <span>Manage Route</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="displayRouteStation.jsf" class="sidebar-link">
+                            <i class="fa-solid fa-map-location-dot"></i>
+                            <span>Manage Station Route</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="displayStationLink.jsf" class="sidebar-link">
+                            <i class="fa-solid fa-link"></i>
+                            <span>Manage Station Link</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="displaySchedule.jsf" class="sidebar-link">
+                            <i class="fa-solid fa-calendar-days"></i>
+                            <span>Manage Metro Schedule</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="displayInterchange.jsf" class="sidebar-link">
+                            <i class="fa-solid fa-code-merge"></i>
+                            <span>Manage Interchange</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="displayUser.jsf" class="sidebar-link">
+                            <i class="fa-solid fa-users"></i>
+                            <span>Manage User</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="displayRole.jsf" class="sidebar-link">
+                            <i class="fa-solid fa-user-shield"></i>
+                            <span>Manage Role</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="displayPassenger.jsf" class="sidebar-link">
+                            <i class="fa-solid fa-person"></i>
+                            <span>Manage Passenger</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="displayScheme.jsf" class="sidebar-link">
+                            <i class="fa-solid fa-percent"></i>
+                            <span>Manage Scheme</span>
+                        </a>
+                    </li>
+                    <!--                    <li class="sidebar-item">
+                                            <a href="displayIssue.jsf" class="sidebar-link">
+                                                <i class="fa-solid fa-clipboard-question"></i>
+                                                <span>Resolve Issues</span>
+                                            </a>
+                                        </li>-->
+                    <li class="sidebar-item">
+                        <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
+                           data-bs-target="#auth" aria-expanded="false" aria-controls="auth">
+                            <i class="fa-solid fa-clipboard-question"></i>
+                            <span>Manage Issues</span>
+                        </a>
+                        <ul id="auth" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+                            <li class="sidebar-item">
+                                <a href="displayIssue.jsf" class="sidebar-link"><i class="fa-solid fa-hourglass-half"></i>Pending Issues</a>
+                            </li>
+                            <li class="sidebar-item">
+                                <a href="displayResolvedIssue.jsf" class="sidebar-link"><i class="fa-solid fa-flag-checkered"></i>Resolved Issues</a>
+                            </li>
+                        </ul>
+                    </li>
+                     <li class="sidebar-item">
+                        <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
+                           data-bs-target="#collection" aria-expanded="false" aria-controls="auth">
+                            <i class="fa-solid fa-hand-holding-dollar"></i>
+                            <span>Manage Collection</span>
+                        </a>
+                        <ul id="collection" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+                            <li class="sidebar-item">
+                                <a href="displayCollection.jsf" class="sidebar-link"><i class="fa-solid fa-sack-dollar"></i>Total Collection</a>
+                            </li>
+                            <li class="sidebar-item">
+                                <a href="displayCashierCollection.jsf" class="sidebar-link"><i class="fa-solid fa-magnifying-glass-dollar"></i>Cashier-Wise Collection</a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li class="sidebar-item">
+                        <a href="displayFare.jsf" class="sidebar-link">
+                            <i class="fa-solid fa-indian-rupee-sign"></i>
+                            <span>Manage Fare</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="displayMetro.jsf" class="sidebar-link">
+                            <i class="fa-solid fa-train"></i>
+                            <span>Manage Metro</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="displayNotification.jsf" class="sidebar-link">
+                            <i class="fa-solid fa-bullhorn"></i>
+                            <span>Manage Notification</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="displaySubscription.jsf" class="sidebar-link">
+                           <i class="fa-solid fa-gem"></i>
+                            <span>Manage Subscription</span>
+                        </a>
+                    </li>
+                     <li class="sidebar-item">
+                        <a href="displayBooking.jsf" class="sidebar-link">
+                           <i class="fa-solid fa-calendar-check"></i>
+                            <span>Manage Bookings</span>
+                        </a>
+                    </li>
+                </ul>
+                <div class="sidebar-footer" style="margin-top: -30px;">
+                    <h:form>
+                        <h:commandLink action="#{loginController.logout()}" styleClass="sidebar-link">
+                            <i class="fa-solid fa-right-from-bracket"></i>
+                            <span>Logout</span>
+                        </h:commandLink>
+                    </h:form>
+                </div>
+            </aside>
+
+            <div class="main p-3">
+                <!--<div class="text-center">-->
+                <ui:insert name="content">Hello From Admin</ui:insert>
+                <!--</div>-->
+            </div>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+        <script src="../js/script.js"></script>
+    </h:body>
+</html>

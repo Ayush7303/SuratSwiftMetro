@@ -1,0 +1,53 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <ui:composition template="header.xhtml">
+            <ui:define name="content">
+
+                <h4>Create Fare</h4>
+                <div class="card p-3">
+
+                    <div class="ui-fluid">
+
+                        <h:form>
+
+                            <div class="field">
+                                <p:outputLabel for="ss" value="Select Source"/>
+                                <p:selectOneMenu id="ss" value="#{fareController.source}">
+                                    <f:selectItems value="#{stationController.allStations}" var="s" itemLabel="#{s.stationname}" itemValue="#{s.stationid}"/>
+                                </p:selectOneMenu>
+                            </div>
+
+                            <div class="field">
+                                <p:outputLabel for="sd" value="Select Destination"/>
+                                <p:selectOneMenu id="sd" value="#{fareController.destination}">
+                                    <f:selectItems value="#{stationController.allStations}" var="s" itemLabel="#{s.stationname}" itemValue="#{s.stationid}"/>
+                                </p:selectOneMenu>
+                            </div>
+
+                            <div class="field">
+                                <p:outputLabel for="sf" value="Fare"/>
+                                <p:inputText id="sf" value="#{fareController.newFare.fare}">
+                                </p:inputText>
+                            </div>
+                            <div class="button-container" style="display: flex;gap:10px;margin-top: 15px;">
+                                <p:commandButton value="Add" action="#{fareController.addFare()}" style="margin-top: 15px;background: #EC6B5B;border: none;width: 10%;"/>
+                                <p:commandButton value="Back To List" action="displayFare.jsf?faces-redirect=true" style="margin-top: 15px;background: gray;border: none;width: 10%;" immediate="true"/>                    
+                            </div>
+                        </h:form>
+
+                    </div>
+                </div>
+
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

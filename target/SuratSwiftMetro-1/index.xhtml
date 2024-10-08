@@ -1,0 +1,645 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Home</title>
+        <!-- site icon -->
+        <link rel="icon" href="images/fevicon.png" type="image/png" />
+        <!-- bootstrap css -->
+        <link rel="stylesheet" href="css/bootstrap.min.css" />
+        <!-- site css -->
+        <link rel="stylesheet" href="css/style.css" />
+        <!-- responsive css -->
+        <link rel="stylesheet" href="css/responsive.css" />
+        <!-- color css -->
+        <link rel="stylesheet" href="css/colors.css" />
+        <!-- select bootstrap -->
+        <link rel="stylesheet" href="css/bootstrap-select.css" />
+        <!-- scrollbar css -->
+        <link rel="stylesheet" href="css/perfect-scrollbar.css" />
+        <!-- custom css -->
+        <link rel="stylesheet" href="css/custom.css" />
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+        <script src="https://kit.fontawesome.com/e6a8e37cff.js" crossorigin="anonymous"></script> 
+        <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    </h:head>
+
+    <h:body>
+        <div class="full_container">
+            <div class="inner_container">
+                <!-- Sidebar  -->
+                <nav id="sidebar">
+                    <div class="sidebar_blog_1">
+                        <div class="sidebar-header">
+                            <div class="logo_section">
+                                <a href="/SuratSwiftMetro/index.jsf"><img class="logo_icon img-responsive" src="images/logo/logo_icon.png" alt="#" /></a>
+                            </div>
+                        </div>
+                        <div class="sidebar_user_info">
+                            <div class="user_profle_side">
+                                <div class="user_img">
+                                    <c:choose>
+                                        <c:when test="${not empty indexController.userImg()}">
+                                            <img class="img-responsive rounded-circle" src="Passenger/profile/#{indexController.userImg()}" alt="#" />
+                                        </c:when>                                                        
+                                        <c:otherwise>
+                                            <img class="img-responsive rounded-circle" src="Passenger/profile/guest_user.png" alt="#" />
+                                        </c:otherwise>
+                                    </c:choose>    
+                                </div>
+                                <div class="user_info">
+                                    <c:choose>
+                                        <c:when test="${not empty indexController.userName()}">
+                                            <h5><h:outputText value="#{indexController.userName()}"/></h5>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <h5>Anonymous</h5>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="sidebar_blog_2">
+                        <ul class="list-unstyled components">
+                            <li><a href="/SuratSwiftMetro/index.jsf"><i class="fa fa-globe orange_color"></i> <span>Home</span></a></li>
+                            <li><a href="/SuratSwiftMetro/scheme.jsf"><i class="fa fa-diamond purple_color"></i> <span>Schemes</span></a></li>
+                            <c:if test="${indexController.userRole() eq 'Passenger'}">
+                                <li><a href="/SuratSwiftMetro/Passenger/mybooking.jsf"><i class="fa-solid fa-passport yellow_color"></i> <span>My Bookings</span></a></li>
+                                <li><a href="/SuratSwiftMetro/Passenger/myscheme.jsf"><i class="fa-solid fa-newspaper green_color"></i> <span>My Scheme</span></a></li>                                
+                                <li><a href="/SuratSwiftMetro/issue.jsf"><i class="fa-solid fa-paper-plane yellow_color"></i> <span>Issues</span></a></li>
+                            </c:if>
+                            <li><a href="/SuratSwiftMetro/about.jsf"><i class="fa fa-object-group blue2_color"></i> <span>About Us</span></a></li>
+                            <li><a href="/SuratSwiftMetro/contact.jsf"><i class="fa fa-briefcase blue1_color"></i> <span>Contact Us</span></a></li>
+                        </ul>
+                    </div>
+                </nav>
+                <!-- end sidebar -->
+                <!-- right content -->
+                <div id="content">
+                    <!-- topbar -->
+                    <div class="topbar">
+                        <nav class="navbar navbar-expand-lg navbar-light">
+                            <div class="full">
+                                <div class="logo_section">
+                                    <a href="/SuratSwiftMetro/index.jsf"><h1 class="logo_text">SuratSwiftMetro</h1></a>
+                                </div>
+                                <div class="right_topbar">
+                                    <div class="icon_info">
+                                        <div class="dropdown_section">
+                                            <div class="dropdown dropleft mt-2">
+                                                <button type="button" class="btn dark_bg2 dropdown-toggle"  style="background: #15283C;" data-toggle="dropdown"><i  class="fa fa-bell-o h4 text-light"></i><span class="badge">2</span></button>
+                                                <div class="dropdown-menu margin_left p-1">
+                                                    <p:repeat value="#{indexController.notifications}" var="notification">
+                                                        <a class="dropdown-item my-2 text-wrap white_shd">#{notification.description}</a>
+                                                    </p:repeat>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <ul class="user_profile_dd">
+                                            <li>
+                                                <a class="dropdown-toggle" data-toggle="dropdown">
+                                                    <c:choose>
+                                                        <c:when test="${not empty indexController.userImg()}">
+                                                            <img class="img-responsive rounded-circle" src="Passenger/profile/#{indexController.userImg()}" alt="#" />
+                                                        </c:when>                                                        
+                                                        <c:otherwise>
+                                                            <img class="img-responsive rounded-circle" src="Passenger/profile/guest_user.png" alt="#" />
+                                                        </c:otherwise>
+                                                    </c:choose>
+                                                </a>
+                                                <div class="dropdown-menu">
+                                                    <h:form>
+                                                        <c:if test="${empty indexController.userRole()}">
+                                                            <a class="dropdown-item" href="/SuratSwiftMetro/register.jsf"><span>Sign Up</span> <i class="fa fa-user-plus"></i></a>
+                                                            <a class="dropdown-item" href="/SuratSwiftMetro/login.jsf"><span>Sign In</span> <i class="fa fa-sign-in"></i></a>                                                            
+                                                        </c:if>
+                                                        <c:if test="${not empty indexController.userRole()}">
+                                                            <h:commandLink action="#{loginController.logout()}" class="dropdown-item"><span>Sign Out</span> <i class="fa fa-sign-out"></i></h:commandLink>
+                                                            <a class="dropdown-item" href="/SuratSwiftMetro/Passenger/profile.jsf"><span>Profile</span> <i class="fa-solid fa-id-card"></i></a>                                                            
+                                                        </c:if>
+
+                                                    </h:form>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </nav>
+                    </div>
+                    <!-- end topbar -->
+                    <!-- dashboard inner -->
+                    <div class="container-fluid">
+                        <div class="row column1 mt-3">
+                            <div class="col-md-12 col-lg-12">
+                                <div class="page_title">
+                                    <h2><span class="mx-3"><i class="fa-solid fa-magnifying-glass orange_color"></i></span>Find Your Trip</h2>
+                                </div>          
+                                <div class="row">
+                                    <div class="full my-4">
+                                        <form>
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <h:outputLabel value="From"/>
+                                                    <h:selectOneMenu id="source" value="#{indexController.source}" class="form-control">
+                                                        <f:selectItems value="#{indexController.allStations}" var="st" itemLabel="#{st.stationname}" itemValue="#{st.stationname}"/>
+                                                    </h:selectOneMenu>
+                                                </div>
+                                                <!--                                                <div class="col-md-2 text-center">
+                                                                                                    <button type="button" class="border-0 bg-none transfer-btn rounded-circle"><i class="fa-solid fa-arrows-left-right orange_color"></i></button>
+                                                                                                </div>                                            -->
+                                                <div class="col-md-4">
+                                                    <h:outputLabel value="To"/>
+                                                    <h:selectOneMenu id="destination" value="#{indexController.destinatin}" class="form-control">
+                                                        <f:selectItems value="#{indexController.allStations}" var="st" itemLabel="#{st.stationname}" itemValue="#{st.stationname}"/>
+                                                    </h:selectOneMenu>
+                                                    <label id="destError" class="text-danger"></label>
+                                                </div>
+                                                <div class="col-md-2 text-center">
+                                                    <button type="button" style="margin-top: 28px;background: #EC6B5B;border: none;" class="btn btn-primary" onclick="findFare(); findRoute(); displayJourney();">Find Trip</button>
+                                                </div>
+                                            </div>
+                                        </form>                                        
+                                    </div>                                     
+                                </div>
+
+                                <div class="row dark_bg">
+                                    <div class="full" id="journey-route">
+                                        <div class="row">
+                                            <div class="heading1 my-3 mx-4">
+                                                <h2><span class="mx-3"><i class="fa-solid fa-route orange_color"></i></span>Your Metro Trip</h2>
+                                            </div>                          
+                                        </div>
+                                        <div class="row full mb-3">
+                                            <div class="col-md-5 full">
+                                                <div class="row mx-2">
+                                                    <div class="col-md-7">
+                                                        <h5 class="text-white" id="source-display"></h5>
+                                                    </div>
+                                                    <div class="col-md-1">
+                                                        <button type="button" class="dark_bg transfer-btn border-0" data-toggle="collapse" data-target="#route-display" area-expanded="false" area-controls="route-display" onclick="changeCaret();">
+                                                            <i class="fa-solid fa-angle-down" id="journy-shower"></i>
+                                                        </button>
+                                                    </div>                                                                                                  
+                                                </div>
+                                                <div class="row mx-4">
+                                                    <ul class="collapse" id="route-display"></ul>                                                
+                                                </div>
+                                                <div class="row mx-4">
+                                                    <h5 class="text-white" id="destination-display"></h5>                                                
+                                                </div>                                                                                        
+                                            </div>
+                                            <div class="col-md-7 full">
+                                                <div class="row text-light my-2">
+                                                    <div class="col-md-8 py-2">
+                                                        <h2>Total Fare : ₹ <span id="price"></span></h2>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <c:if test="${indexController.userRole() eq 'Passenger'}">
+                                                            <button class="btn orange_bg fw-bold" id="rzp-button1" onclick="CreateOrderId();">Book Now</button>
+                                                        </c:if>                                                        
+                                                    </div>                                                    
+                                                </div>
+                                                <c:if test="${indexController.userRole() eq 'Passenger'}">
+                                                    <h:form class="hide">
+                                                        <h:panelGroup styleClass="booking-form">
+                                                            <h:inputHidden id="txt_paymentid" value="#{passangerHome.paymentid}"/>
+                                                            <h:inputHidden id="txt_src" value="#{passangerHome.source}"/>
+                                                            <h:inputHidden id="txt_dest" value="#{passangerHome.destinatin}"/>
+                                                            <h:inputHidden id="txt_price" value="#{passangerHome.price}"/>
+                                                        </h:panelGroup>
+                                                        <h:commandButton class="book_btn" title="submit" actionListener="#{passangerHome.makeBooking()}"/>
+                                                    </h:form>
+                                                </c:if>                                                    
+                                            </div>                                            
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="white_shd full">
+                                        <div id="mapCanvas"></div>
+                                    </div>                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- footer -->
+                    <div class="container-fluid">
+                        <div class="footer">
+                            <p>Copyright © 2024, made with &hearts; by <b>SuratSwiftMetro Team</b>
+                            </p>
+                        </div>
+                    </div>
+                    <!-- end dashboard inner -->
+                </div>
+            </div>
+        </div>
+        <!-- jQuery -->
+
+        <script src="js/popper.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <!-- wow animation -->
+        <script src="js/animate.js"></script>
+        <!-- select country -->
+        <script src="js/bootstrap-select.js"></script>
+        <!-- owl carousel -->
+        <script src="js/owl.carousel.js"></script> 
+        <!-- chart js -->
+        <script src="js/Chart.min.js"></script>
+        <script src="js/Chart.bundle.min.js"></script>
+        <script src="js/utils.js"></script>
+        <script src="js/analyser.js"></script>
+        <!-- nice scrollbar -->
+        <script src="js/perfect-scrollbar.min.js"></script>
+        <script>
+                                                                var ps = new PerfectScrollbar('#sidebar');
+        </script>
+        <!-- custom js -->
+        <script src="js/custom.js"></script>
+        <script src="js/chart_custom_style1.js"></script>
+        <script>
+                                                                setInterval((e) => {
+                                                                    $("cashierAssigner").click();
+                                                                    console.log("Button clicked!!");
+                                                                    e.preventDefault();
+                                                                }, 1000);
+                                                                var map = L.map('mapCanvas').setView([21.1750, 72.8311], 12);
+                                                                var osm = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                                                                    attribution: 'copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+                                                                });
+                                                                osm.addTo(map);
+                                                                googleHybrid = L.tileLayer('http://{s}.google.com/vt/lyrs=s,h&amp;x={x}&amp;y={y}&amp;z={z}', {
+                                                                    maxZoom: 20,
+                                                                    subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
+                                                                });
+                                                                googleHybrid.addTo(map);
+                                                                var icon = L.icon({
+                                                                    iconUrl: 'images/metro-icon.png',
+                                                                    iconSize: [40, 40],
+                                                                    iconAnchor: [20, 44],
+                                                                    popupAnchor: [3, -30]
+                                                                });
+                                                                var inter_cng = L.icon({
+                                                                    iconUrl: 'images/level-crossing.png',
+                                                                    iconSize: [40, 40],
+                                                                    iconAnchor: [20, 50],
+                                                                    popupAnchor: [3, -30]
+                                                                });
+                                                                var active_icon = L.icon({
+                                                                    iconUrl: 'images/active-metro.png',
+                                                                    iconSize: [40, 40],
+                                                                    iconAnchor: [20, 50],
+                                                                    popupAnchor: [3, -30]
+                                                                });
+                                                                $.ajax({
+                                                                    url: "http://localhost:8080/SuratSwiftMetro/resources/user/route_station/get",
+                                                                    type: 'GET',
+                                                                    headers: {"Accepts": "application/json"},
+                                                                    success: function (route_stations) {
+                                                                        let i = 0;
+                                                                        let latlang1 = [];
+                                                                        let latlang2 = [];
+                                                                        for (var s in route_stations) {
+                                                                            if (route_stations[i].routeId === 1) {
+                                                                                if (route_stations[i].stationid !== 10) {
+                                                                                    let station = route_stations[i].stationName;
+                                                                                    let latitude = route_stations[i].latitude;
+                                                                                    let longitude = route_stations[i].longitude;
+                                                                                    latlang1.push([latitude, longitude]);
+                                                                                    var m = L.marker([latitude, longitude], {icon: icon});
+                                                                                    m.bindPopup('<h6>Station : ' + station + '</h6>').openPopup();
+                                                                                    map.addLayer(m);
+                                                                                }
+                                                                                i++;
+                                                                            } else if (route_stations[i].routeId === 2) {
+                                                                                if (route_stations[i].stationid !== 10) {
+                                                                                    let station = route_stations[i].stationName;
+                                                                                    let latitude = route_stations[i].latitude;
+                                                                                    let longitude = route_stations[i].longitude;
+                                                                                    latlang2.push([latitude, longitude]);
+                                                                                    var m = L.marker([latitude, longitude], {icon: icon});
+                                                                                    m.bindPopup('<h6>Station : ' + station + '</h6>').openPopup();
+                                                                                    map.addLayer(m);
+                                                                                }
+                                                                                i++;
+                                                                            }
+                                                                        }
+                                                                        var p1 = new L.polyline(
+                                                                                latlang1, {
+                                                                                    color: "red",
+                                                                                    smoothFactor: 1,
+                                                                                    weight: 6
+                                                                                }).addTo(map);
+                                                                        var p2 = new L.polyline(
+                                                                                latlang2, {
+                                                                                    color: "green",
+                                                                                    smoothFactor: 1,
+                                                                                    weight: 6
+                                                                                }).addTo(map);
+                                                                    }
+                                                                });
+                                                                $.ajax({
+                                                                    url: "http://localhost:8080/SuratSwiftMetro/resources/user/interchange/get",
+                                                                    type: 'GET',
+                                                                    headers: {"Accepts": "application/json"},
+                                                                    success: function (interchanges) {
+                                                                        console.log(interchanges[0]);
+                                                                        let station = interchanges[0].stationid.stationname;
+                                                                        let latitude = interchanges[0].stationid.latitude;
+                                                                        let longitude = interchanges[0].stationid.longitude;
+                                                                        let area = interchanges[0].stationid.area;
+                                                                        var m = L.marker([latitude, longitude], {icon: inter_cng});
+                                                                        m.bindPopup('<h6>Station : ' + station + ' (Interchange)</h6> <h6>Area : ' + area + '</h6>').openPopup();
+                                                                        m.addTo(map);
+                                                                    }
+                                                                });
+                                                                function findFare() {
+                                                                    let source = document.getElementById("source").value;
+                                                                    let destination = document.getElementById("destination").value;
+                                                                    $.ajax({
+                                                                        url: "http://localhost:8080/SuratSwiftMetro/resources/user/fare/getBySourceDestination/" + source + "/" + destination,
+                                                                        type: 'GET',
+                                                                        headers: {"Accepts": "application/json"},
+                                                                        success: function (fare) {
+                                                                            document.getElementById("price").innerHTML = fare.fare;
+                                                                        }
+                                                                    });
+                                                                }
+
+                                                                function setAllStations() {
+                                                                    $.ajax({
+                                                                        url: "http://localhost:8080/SuratSwiftMetro/resources/user/station/get",
+                                                                        type: 'GET',
+                                                                        headers: {"Accepts": "application/json"},
+                                                                        success: function (stations) {
+                                                                            i = 0;
+                                                                            for (var s in stations) {
+
+                                                                                let option = document.createElement("option");
+                                                                                option.vaule = stations[i].stationname;
+                                                                                option.text = stations[i].stationname;
+
+                                                                                document.getElementById("destination").append(option);
+
+                                                                                let option2 = document.createElement("option");
+                                                                                option2.vaule = stations[i].stationname;
+                                                                                option2.text = stations[i].stationname;
+                                                                                document.getElementById("source").append(option2);
+                                                                                i++;
+                                                                            }
+                                                                        }
+                                                                    });
+                                                                }
+
+                                                                function findRoute() {
+
+                                                                    var s = document.getElementById("source").value;
+                                                                    var d = document.getElementById("destination").value;
+                                                                    if (s === d) {
+                                                                        $("#destError").text("Source And Destination Must be Different!!");
+                                                                    } else {
+                                                                        $("#destError").text("");
+                                                                        let r1 = {};
+                                                                        let r2 = {};
+
+                                                                        $.ajax({
+                                                                            url: "http://localhost:8080/SuratSwiftMetro/resources/user/routeStation/getByStation/" + s,
+                                                                            type: 'GET',
+                                                                            headers: {"Accepts": "application/json"},
+                                                                            success: function (sroute) {
+                                                                                r1 = sroute;
+                                                                                $.ajax({
+                                                                                    url: "http://localhost:8080/SuratSwiftMetro/resources/user/routeStation/getByStation/" + d,
+                                                                                    type: 'GET',
+                                                                                    headers: {"Accepts": "application/json"},
+                                                                                    success: function (droute) {
+                                                                                        r2 = droute;
+
+                                                                                        $.ajax({
+                                                                                            url: "http://localhost:8080/SuratSwiftMetro/resources/user/stationLink/get",
+                                                                                            type: 'GET',
+                                                                                            headers: {"Accepts": "application/json"},
+                                                                                            success: function (station_link) {
+                                                                                                let source = {};
+                                                                                                let destination = {};
+                                                                                                let k = 0;
+                                                                                                s = document.getElementById("source").value;
+                                                                                                d = document.getElementById("destination").value;
+                                                                                                for (let sr in station_link) {
+                                                                                                    let station = station_link[k].currentstation.stationname;
+                                                                                                    let latitude = station_link[k].currentstation.latitude;
+                                                                                                    let longitude = station_link[k].currentstation.longitude;
+                                                                                                    let area = station_link[k].currentstation.area;
+                                                                                                    var marker = L.marker([latitude, longitude], {icon: icon});
+                                                                                                    marker.bindPopup('<h6>Station : ' + station + '</h6> <h6>Area : ' + area + '</h6>').openPopup();
+                                                                                                    //marker.addTo(map);
+                                                                                                    map.addLayer(marker);
+                                                                                                    console.log("Source : " + s + " Deatination = " + d);
+                                                                                                    if (station_link[k].currentstation.stationname === s) {
+                                                                                                        source = station_link[k].currentstation;
+                                                                                                    } else if (station_link[k].currentstation.stationname === d) {
+                                                                                                        destination = station_link[k].currentstation;
+                                                                                                    }
+                                                                                                    k++;
+                                                                                                }
+                                                                                                console.log("Source : " + source + " Deatination = " + destination.stationid);
+                                                                                                f = 0;
+                                                                                                let larlang = [];
+                                                                                                console.log("Station Link : " + station_link);
+
+                                                                                                let isrc = document.createElement("i");
+                                                                                                isrc.setAttribute("class", "fa-solid fa-location-dot mx-2");
+                                                                                                document.getElementById("source-display").innerHTML = "";
+                                                                                                document.getElementById("source-display").appendChild(isrc);
+                                                                                                document.getElementById("source-display").appendChild(document.createTextNode(source.stationname));
+
+                                                                                                let idest = document.createElement("i");
+                                                                                                idest.setAttribute("class", "fa-solid fa-location-pin mx-2");
+                                                                                                document.getElementById("destination-display").innerHTML="";
+                                                                                                document.getElementById("destination-display").appendChild(idest);
+document.getElementById("route-display").innerHTML="";
+                                                                                                document.getElementById("destination-display").appendChild(document.createTextNode(destination.stationname));
+                                                                                                if (r1.routeid === r2.routeid) {
+                                                                                                    for (let sl in station_link) {
+                                                                                                        console.log("Current : " + station_link[f].currentstation.stationid + " Source Id " + source.stationid + " Destination Id = " + destination.stationid);
+                                                                                                        i = f;
+
+                                                                                                        if (station_link[f].currentstation.stationid === source.stationid) {
+                                                                                                            do {
+                                                                                                                let station = station_link[i].currentstation.stationname;
+                                                                                                                let latitude = station_link[i].currentstation.latitude;
+                                                                                                                let longitude = station_link[i].currentstation.longitude;
+                                                                                                                let area = station_link[i].currentstation.area;
+
+                                                                                                                var marker = L.marker([latitude, longitude], {icon: active_icon});
+                                                                                                                marker.bindPopup('<h6>Station : ' + station + '</h6> <h6>Area : ' + area + '</h6>').openPopup();
+                                                                                                                //marker.addTo(map);
+                                                                                                                map.addLayer(marker);
+
+                                                                                                                larlang.push([latitude, longitude]);
+                                                                                                                console.log("Count : " + i);
+
+
+                                                                                                                if (station_link[i].nextstation.stationid >= destination.stationid) {
+                                                                                                                    console.log("Count : " + i);
+                                                                                                                } else {
+                                                                                                                    let li = document.createElement("li");
+                                                                                                                    let icon = document.createElement("i");
+                                                                                                                    icon.setAttribute("class", "fa-solid fa-circle-dot mx-2 my-2");
+                                                                                                                    li.appendChild(icon);
+                                                                                                                    li.appendChild(document.createTextNode(station_link[i].nextstation.stationname));
+                                                                                                                    document.getElementById("route-display").appendChild(li);
+                                                                                                                }
+                                                                                                                if (source.stationid >= destination.stationid) {
+                                                                                                                    i--;
+                                                                                                                } else {
+                                                                                                                    i++;
+                                                                                                                }
+                                                                                                            } while (station_link[i].previousstation.stationid !== destination.stationid);
+
+                                                                                                        } else {
+                                                                                                            let station = station_link[i].currentstation.stationname;
+                                                                                                            let latitude = station_link[i].currentstation.latitude;
+                                                                                                            let longitude = station_link[i].currentstation.longitude;
+                                                                                                            let area = station_link[i].currentstation.area;
+//                                                    
+                                                                                                            var marker = L.marker([latitude, longitude], {icon: icon});
+                                                                                                            marker.bindPopup('<h6>Station : ' + station + '</h6> <h6>Area : ' + area + '</h6>').openPopup();
+
+                                                                                                            map.addLayer(marker);
+                                                                                                        }
+                                                                                                        f++;
+                                                                                                    }
+                                                                                                    console.log("latlongs : " + larlang);
+                                                                                                    var p = L.polyline(
+                                                                                                            larlang,
+                                                                                                            {
+                                                                                                                "delay": 400,
+                                                                                                                "dashArray": [
+                                                                                                                    10, 20
+                                                                                                                ],
+                                                                                                                "weight": 10,
+                                                                                                                "color": "#00CCFF",
+                                                                                                                "pulseColor": "#FFFFFF",
+                                                                                                                "paused": false,
+                                                                                                                "reverse": false
+                                                                                                            }).addTo(map);
+                                                                                                    map.addLayer(p);
+                                                                                                } else {
+                                                                                                    let route1 = [];
+                                                                                                    let route2 = [];
+                                                                                                    let i = 0;
+                                                                                                    let j = 0;
+                                                                                                    for (var s in station_link) {
+                                                                                                        if (station_link[i].currentstation.stationid === source.stationid) {
+                                                                                                            do {
+                                                                                                                console.log(station_link[i].routeid.routeid + " > " + r1.routeid);
+                                                                                                                if (station_link[i].routeid.routeid === r1.routeid) {
+                                                                                                                    route1.push(station_link[i]);
+                                                                                                                    console.log(i + " > " + station_link[i].currentstation.stationname);
+                                                                                                                } else if (station_link[i].routeid.routeid === r2.routeid) {
+                                                                                                                    route2.push(station_link[i]);
+                                                                                                                    console.log(i + " > " + station_link[i].currentstation.stationname);
+                                                                                                                }
+
+                                                                                                            } while (station_link[j].currentstation.stationid === destination.stationid);
+                                                                                                        }
+                                                                                                    }
+                                                                                                    console.log("Route 1 : " + route1);
+                                                                                                    console.log("Route 2 : " + route2);
+                                                                                                }
+                                                                                            }
+                                                                                        });
+                                                                                    }
+                                                                                });
+                                                                            }
+                                                                        });
+                                                                    }
+                                                                }
+
+                                                                function displayJourney() {
+                                                                    document.getElementById("journey-route").style.display = "block";
+                                                                }
+
+                                                                function changeCaret() {
+                                                                    let icon = document.getElementById("journy-shower");
+                                                                    if (icon.getAttribute("class") === "fa-solid fa-angle-down") {
+                                                                        icon.removeAttribute("class");
+                                                                        icon.setAttribute("class", "fa-solid fa-angle-up");
+                                                                    } else if (icon.getAttribute("class") === "fa-solid fa-angle-up") {
+                                                                        icon.removeAttribute("class");
+                                                                        icon.setAttribute("class", "fa-solid fa-angle-down");
+                                                                    }
+                                                                }
+        </script>
+        <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+        <script>
+                                                                var orderid;
+                                                                function CreateOrderId() {
+                                                                    console.log("Orderid Creation");
+                                                                    let price = parseInt(document.getElementById("price").innerHTML);
+                                                                    console.log("Price JS : " + price);
+                                                                    $.ajax({
+                                                                        type: "GET",
+                                                                        url: "http://localhost:8080/SuratSwiftMetro/PaymentRequest",
+                                                                        data: {"price": price},
+                                                                        success: function (data) {
+                                                                            orderid = data;
+                                                                            MakePayment();
+                                                                        }
+                                                                    });
+                                                                }
+
+                                                                function MakePayment() {
+                                                                    console.log("Order Id : " + orderid);
+                                                                    var options = {
+                                                                        "key": "rzp_test_YD7Gi5TdKmWROP", // Enter the Key ID generated from the Dashboard
+                                                                        "amount": "20000", // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+                                                                        "currency": "INR",
+                                                                        "name": "Acme Corp", //your business name
+                                                                        "description": "Test Transaction",
+                                                                        "image": "https://stock.adobe.com/kr/images/dots-or-points-letter-ssm-technology-logo-designs-concept-vector-template-element/470540024",
+                                                                        "order_id": orderid, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+                                                                        "handler": function (response) {
+                                                                            let source = document.getElementById("source").value;
+                                                                            let destination = document.getElementById("destination").value;
+                                                                            let price = document.getElementById("price").innerHTML;
+
+                                                                            let inputs = document.querySelectorAll(".booking-form input[type=hidden]");
+                                                                            console.log(inputs);
+                                                                            console.log(inputs[0]);
+                                                                            inputs[0].value = response.razorpay_payment_id;
+                                                                            inputs[1].value = source;
+                                                                            inputs[2].value = destination;
+                                                                            inputs[3].value = price;
+
+                                                                            console.log("Success");
+                                                                            let btn = document.getElementsByClassName("book_btn");
+                                                                            console.log(btn);
+                                                                            btn[0].click();
+                                                                        },
+                                                                        "prefill": {//We recommend using the prefill parameter to auto-fill customer's contact information especially their phone number
+                                                                            "name": "Gaurav Kumar", //your customer's name
+                                                                            "email": "gaurav.kumar@example.com",
+                                                                            "contact": "9000090000" //Provide the customer's phone number for better conversion rates 
+                                                                        },
+                                                                        "notes": {
+                                                                            "address": "Razorpay Corporate Office"
+                                                                        },
+                                                                        "theme": {
+                                                                            "color": "#3399cc"
+                                                                        }
+                                                                    };
+                                                                    var rzp1 = new Razorpay(options);
+                                                                    rzp1.open();
+                                                                }
+
+        </script>
+    </h:body>
+</html>

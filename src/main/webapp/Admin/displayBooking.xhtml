@@ -1,0 +1,58 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <ui:composition template="header.xhtml">
+            <ui:define name="content">
+                <div class="card">
+                    <h:form>
+                        <p:dataTable var="booking" value="#{bookingController.allBookings}" rows="5"
+                                     paginator="true" paginatorPosition="top"
+                                     paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                     currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} records"
+                                     rowsPerPageTemplate="5,10,{ShowAll|'All'}" sortMode="single">
+
+                            <p:column headerText="Passenger" sortBy="#{booking.passangerid.username.username}" filterBy="#{booking.passangerid.username.username}" filterMatchMode="contains">
+                                <h:outputText value="#{booking.passangerid.username.username}" />
+                            </p:column>
+
+                            <p:column headerText="Source" sortBy="#{booking.source.stationname}" filterBy="#{booking.source.stationname}" filterMatchMode="contains">
+                                <h:outputText value="#{booking.source.stationname}" />
+                            </p:column>
+                          
+                            <p:column headerText="Destination" sortBy="#{booking.destination.stationname}" filterBy="#{booking.destination.stationname}" filterMatchMode="contains">
+                                <h:outputText value="#{booking.destination.stationname}" />
+                            </p:column>
+                            
+                            <p:column headerText="Distance" sortBy="#{booking.distance}" filterBy="#{booking.distance}" filterMatchMode="contains">
+                                <h:outputText value="#{booking.distance}" />
+                            </p:column>
+                            
+                            <p:column headerText="Total Fair" sortBy="#{booking.totalfair}" filterBy="#{booking.totalfair}" filterMatchMode="contains">
+                                <h:outputText value="#{booking.totalfair}" />
+                            </p:column>
+                            
+                            <p:column headerText="Booking Date" sortBy="#{booking.bookingdate}" filterBy="#{booking.bookingdate}" filterMatchMode="contains">
+                                <h:outputText value="#{booking.bookingdate}" />
+                            </p:column>
+                            
+                            <p:column headerText="Payment Status" sortBy="#{booking.paymentid.status}" filterBy="#{booking.paymentid.status}" filterMatchMode="contains">
+                                <h:outputText value="#{booking.paymentid.status}" />
+                            </p:column>
+                            <p:column headerText="Status" sortBy="#{booking.status}" filterBy="#{booking.status}" filterMatchMode="contains">
+                                <h:outputText value="#{booking.status}" />
+                            </p:column>
+                        </p:dataTable>
+                    </h:form>
+                </div>
+
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

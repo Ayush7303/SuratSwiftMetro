@@ -1,0 +1,52 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+         <ui:composition template="header.xhtml">
+            <ui:define name="content">
+
+                <h4>Update Role</h4>
+                                <div class="card p-3">
+
+                <div class="ui-fluid">
+
+                    <h:form>
+                        <h:inputHidden value="#{roleController.existingRole.roleid}" />
+                        <div class="field">
+                             <p:outputLabel value="Select Role:" for="role"/>
+                             <p:selectOneMenu id="role" value="#{roleController.existingRole.rolename}">
+                            <f:selectItem itemLabel="Admin" itemValue="Admin"/>
+                            <f:selectItem itemLabel="Passenger" itemValue="Passenger"/>
+                            <f:selectItem itemLabel="Cashier" itemValue="Cashier"/>
+                        </p:selectOneMenu>
+                        </div>
+                       
+                        <div class="field">
+                            <p:outputLabel for="su" value="Select User"/>
+                            <p:selectOneMenu id="su" value="#{roleController.newUsername}">
+                                <f:selectItems value="#{userController.allUsers}" var="u" itemLabel="#{u.username}" itemValue="#{u.username}"/>
+                            </p:selectOneMenu>
+                        </div>
+                            <div class="button-container" style="display: flex;gap:10px;margin-top: 15px;">
+
+                        <p:commandButton value="Update" action="#{roleController.updateRole()}" style="margin-top: 15px;background: #EC6B5B;border: none;width: 10%;"/>
+                   
+                        <p:commandButton value="Back To List" action="displayRole.jsf?faces-redirect=true" style="margin-top: 15px;background: gray;border: none;width: 10%;" immediate="true"/>                    
+                            </div>
+                   
+                    </h:form>
+
+                </div>
+                                </div>
+
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

@@ -1,0 +1,65 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+         <ui:composition template="header.xhtml">
+            <ui:define name="content">
+                <div class="card">
+                    <h:form>
+                        <p:dataTable var="scheme" value="#{schemeController.allSchemes}" rows="5"
+                                     paginator="true" paginatorPosition="top"
+                                     paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                     currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} records"
+                                     rowsPerPageTemplate="5,10,{ShowAll|'All'}" sortMode="single">
+
+                            <p:column headerText="Scheme Name" sortBy="#{scheme.schemename}" filterBy="#{scheme.schemename}" filterMatchMode="contains">
+                                <h:outputText value="#{scheme.schemename}" />
+                            </p:column>
+
+                            <p:column headerText="Scheme Description" sortBy="#{scheme.schemedescription}" filterBy="#{scheme.schemedescription}" filterMatchMode="contains">
+                                <h:outputText value="#{scheme.schemedescription}" />
+                            </p:column>
+
+                            <p:column headerText="Discount" sortBy="#{scheme.discount}" filterBy="#{scheme.discount}" filterMatchMode="contains">
+                                <h:outputText value="#{scheme.discount}" />
+                            </p:column>
+                            
+                            <p:column headerText="Validity" sortBy="#{scheme.validity}" filterBy="#{scheme.validity}" filterMatchMode="contains">
+                                <h:outputText value="#{scheme.validity}" />
+                            </p:column>
+                            
+                            <p:column headerText="Passanger Type" sortBy="#{scheme.passangertype}" filterBy="#{scheme.passangertype}" filterMatchMode="contains">
+                                <h:outputText value="#{scheme.passangertype}" />
+                            </p:column>
+                            
+                            <p:column headerText="">
+                                <p:commandButton icon="fa-solid fa-trash" value="Delete" action="#{schemeController.deleteScheme(scheme.schemeid)}" style="background: #FF5733;border: none;">
+                                                                    <p:confirm type="popup" header="Confirmation" message="Are you sure you want to delete this record?" icon="pi pi-info-circle"/>
+                                </p:commandButton>
+                            </p:column>
+                            <p:column headerText="">
+                                <p:commandButton icon="fa-solid fa-pen-to-square" value="Update" action="#{schemeController.reflectData(scheme.schemeid)}" style="background: #28A745;border: none;"/>
+                            </p:column>
+                            <f:facet name="paginatorTopLeft">
+                                <p:commandButton value="Create Scheme" icon="fa-solid fa-plus" action="createScheme.jsf?faces-redirect=true" style="background: #EC6B5B;border: none;"/>
+                            </f:facet>
+                        </p:dataTable>
+                        <p:confirmPopup global="true">
+                            <p:commandButton value="No" type="button" styleClass="ui-confirm-popup-no ui-button-flat"/>
+                            <p:commandButton value="Yes" type="button" styleClass="ui-confirm-popup-yes" />
+                        </p:confirmPopup>
+                    </h:form>
+                </div>
+
+            </ui:define>
+        </ui:composition>
+    </h:body>
+    
+</html>

@@ -1,0 +1,83 @@
+    body{
+        font-family: monospace;
+        width: 60%;
+        text-transform: uppercase;
+    }
+    
+    .dark_bg{
+        background: #15283c;
+    }
+    .dark_color{
+        color: #15283c;
+    }
+    
+    .main-box{
+        width: 100%;
+    }
+    
+    .main-box .ticket-header{
+        width: 100%;
+        text-align: center;
+        color : white;
+        padding: 5%;
+        background: #15283c;
+        border-top-left-radius: 20px;
+        border-top-right-radius: 20px;
+    }
+    
+    .main-box .ticket-footer{
+        width: 100%;
+        text-align: center;
+        color : white;        
+        padding: 5%;
+        background: #15283c;
+        border-bottom-left-radius: 20px;
+        border-bottom-right-radius: 20px;
+    }    
+    
+    .main-box .ticket-details{        
+        width: 100%;
+        padding: 5%;
+        background: #d7e8fa;
+    }
+    
+    .main-box .ticket-details .trip-details{
+        width: 100%;
+        text-align: center;
+    }
+    
+    .main-box .ticket-details .fare-issuer-details{
+        width: 100%;
+    }
+    
+    .main-box .ticket-details .fare-issuer-details table{
+        width: 100%;
+    }
+    
+    .main-box .ticket-details .issue-expiry-dates{
+        width: 100%;
+    }
+    
+    .main-box .ticket-details .issue-expiry-dates table{
+        width: 100%;
+    }   
+    
+    .main-box .qr_code{
+        width: 100%;
+        text-align: center;
+    }
+        
+    th, td{
+       padding: 10px 30px;
+       text-align: center;
+    }
+    th, td p{
+        font-size: 15px;
+    }
+    
+    
+    #qr_code{
+        width: 100px;
+    }
+    
+

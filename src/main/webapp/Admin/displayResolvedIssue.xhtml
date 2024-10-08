@@ -1,0 +1,45 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <ui:composition template="header.xhtml">
+            <ui:define name="content">
+                <div class="card">
+                    <h:form>
+                        <p:dataTable var="issue" value="#{issueController.allResolvedIssues}" rows="5"
+                                     paginator="true" paginatorPosition="top"
+                                     paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                     currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} records"
+                                     rowsPerPageTemplate="5,10,{ShowAll|'All'}" sortMode="single">
+
+                            <p:column headerText="Issuer" sortBy="#{issue.issuer.username}" filterBy="#{issue.issuer.username}" filterMatchMode="contains">
+                                <h:outputText value="#{issue.issuer.username}" />
+                            </p:column>
+
+                            <p:column headerText="Description" sortBy="#{issue.description}" filterBy="#{issue.description}" filterMatchMode="contains">
+                                <h:outputText value="#{issue.description}" />
+                            </p:column>
+                            
+                            <p:column headerText="Issue Date" sortBy="#{issue.issuedate}" filterBy="#{issue.issuedate}" filterMatchMode="contains">
+                                <h:outputText value="#{issue.issuedate}" />
+                            </p:column>
+                            
+                            <p:column headerText="Status" sortBy="#{issue.status}" filterBy="#{issue.status}" filterMatchMode="contains">
+                                <h:outputText value="#{issue.status}" />
+                            </p:column>
+
+                                                 
+                        </p:dataTable>
+                    </h:form>
+                </div>
+
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
